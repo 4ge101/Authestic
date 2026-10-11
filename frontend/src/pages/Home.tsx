@@ -27,7 +27,6 @@ export const Home: React.FC = () => {
 
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
 
-  // Time-of-day greeting
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return 'Good morning';
@@ -48,7 +47,6 @@ export const Home: React.FC = () => {
 
   return (
     <div className="home-page">
-      {/* Friendly Personalized Header */}
       <section className="page-header" style={{ marginBottom: '1.25rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
           <div>
@@ -68,7 +66,6 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Daily Mood Check-In Widget */}
       <section style={{ marginBottom: '1.5rem' }}>
         <Card accent="default" style={{ padding: '1rem 1.25rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem', flexWrap: 'wrap', gap: '0.5rem' }}>
@@ -145,7 +142,6 @@ export const Home: React.FC = () => {
         </Card>
       </section>
 
-      {/* Quick-Access 4 Hub Cards */}
       <section style={{ marginBottom: '1.75rem' }}>
         <h3 className="section-title">
           <span>Explore Resources</span>
@@ -225,10 +221,8 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Featured Story and In-Progress Section */}
       <section style={{ marginBottom: '1.75rem' }}>
         <div className="grid-2">
-          {/* Featured Story Card */}
           <Card accent="default">
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
               <span className="badge badge-teal">{featuredStory.category}</span>
@@ -256,7 +250,6 @@ export const Home: React.FC = () => {
             </div>
           </Card>
 
-          {/* Continue Learning Card */}
           <Card accent="default">
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
               <span className="badge badge-sage">Guided Lesson</span>
@@ -285,7 +278,6 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Recommended Calm Exercises */}
       <section>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
           <h3 className="section-title" style={{ margin: 0 }}>

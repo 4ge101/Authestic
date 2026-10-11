@@ -34,36 +34,30 @@ export const Activities: React.FC = () => {
   const [progress, setProgress] = useState(loadProgress());
   const settings = loadSettings();
 
-  // State for Breathing Pacer
   const [breathTechnique, setBreathTechnique] = useState<'box' | 'belly' | 'humming'>('box');
   const [breathingActive, setBreathingActive] = useState(false);
   const [breathPhase, setBreathPhase] = useState<'Inhale' | 'Hold' | 'Exhale' | 'Rest'>('Inhale');
   const [breathCycle, setBreathCycle] = useState(1);
   const [breathSecondsLeft, setBreathSecondsLeft] = useState(4);
 
-  // State for 5-4-3-2-1 Sensory Grounding
   const [groundingStep, setGroundingStep] = useState(0);
   const [groundingChecked, setGroundingChecked] = useState<{ [key: string]: boolean }>({});
 
-  // State for Movement Stretch Break
   const [stretchIndex, setStretchIndex] = useState(0);
   const [stretchTimer, setStretchTimer] = useState(20);
   const [stretchActive, setStretchActive] = useState(false);
 
-  // State for Gratitude Journal
   const [journalMood, setJournalMood] = useState('Calm');
   const [journalPromptIndex, setJournalPromptIndex] = useState(0);
   const [journalText, setJournalText] = useState('');
   const [journalSavedAlert, setJournalSavedAlert] = useState(false);
 
-  // State for Mindful Coloring Canvas
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [brushColor, setBrushColor] = useState('#0d8276');
   const [brushSize, setBrushSize] = useState(8);
   const [isDrawing, setIsDrawing] = useState(false);
   const [selectedCanvasOutline, setSelectedCanvasOutline] = useState<'turtle' | 'flower' | 'owl'>('turtle');
 
-  // State for Affirmations Shield
   const [selectedAffirmations, setSelectedAffirmations] = useState<string[]>([]);
 
   const journalPrompts = [
@@ -135,16 +129,13 @@ export const Activities: React.FC = () => {
     }
   ];
 
-  // Breathing Pacer Interval
   useEffect(() => {
     let timer: ReturnType<typeof setInterval>;
     if (breathingActive) {
       timer = setInterval(() => {
         setBreathSecondsLeft((prev) => {
           if (prev <= 1) {
-            // Transition phase
             if (breathTechnique === 'box') {
-              // 4-4-4-4
               if (breathPhase === 'Inhale') {
                 setBreathPhase('Hold');
                 if (settings.soundEffects) calmSound.playTap(true);
@@ -167,7 +158,6 @@ export const Activities: React.FC = () => {
                 return 4;
               }
             } else if (breathTechnique === 'belly') {
-              // 4-2-6
               if (breathPhase === 'Inhale') {
                 setBreathPhase('Hold');
                 return 2;
@@ -183,7 +173,6 @@ export const Activities: React.FC = () => {
                 return 4;
               }
             } else {
-              // humming: 3-1-5
               if (breathPhase === 'Inhale') {
                 setBreathPhase('Hold');
                 return 1;
@@ -208,7 +197,6 @@ export const Activities: React.FC = () => {
     return () => clearInterval(timer);
   }, [breathingActive, breathPhase, breathTechnique, settings.soundEffects]);
 
-  // Stretch Countdown Timer
   useEffect(() => {
     let timer: ReturnType<typeof setInterval>;
     if (stretchActive) {
@@ -232,18 +220,15 @@ export const Activities: React.FC = () => {
     return () => clearInterval(timer);
   }, [stretchActive, stretchIndex, stretchPoses.length, settings.soundEffects]);
 
-  // Canvas setup and redraw outline
   useEffect(() => {
     if (selectedActivity?.type === 'coloring' && canvasRef.current) {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
 
-      // Draw initial clean background
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Draw simple coloring template outline
       ctx.strokeStyle = '#142333';
       ctx.lineWidth = 3;
       ctx.lineCap = 'round';
