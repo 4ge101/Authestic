@@ -4,12 +4,11 @@ import {
   CheckCircle2,
   RotateCcw,
   Trophy,
-  Smile,
-  Puzzle,
-  Compass,
   X
 } from 'lucide-react';
 import { Card } from '../components/Card.tsx';
+import { AnimalAvatar } from '../components/AnimalAvatars.tsx';
+import { GameToken, type GameTokenType } from '../components/GameTokens.tsx';
 import { games } from '../data.ts';
 import type { Game } from '../lib/types.ts';
 import {
@@ -34,7 +33,7 @@ export const Games: React.FC = () => {
     {
       story: "Sarah's tower of blocks got accidentally knocked over by a passing backpack. Her face feels warm and her fists are tight.",
       question: 'What emotion might Sarah be feeling right now?',
-      options: ['Frustrated or Angry', 'Sleepy', 'Excited'],
+      options: ['Frustrated or Overwhelmed', 'Sleepy', 'Excited'],
       correct: 0,
       feedback: 'Hot cheeks and tight hands are classic physical signs of frustration. Taking a breath helps Sarah pause.'
     },
@@ -55,38 +54,37 @@ export const Games: React.FC = () => {
     {
       story: 'Leo is about to try riding his two-wheel bicycle for the very first time without training wheels. His tummy has fluttery butterflies.',
       question: 'What is that fluttery feeling in his tummy?',
-      options: ['Hungry for pizza', 'Nervous and excited (Anticipation)', 'Tired'],
+      options: ['Hungry for pizza', 'Nervous and excited anticipation', 'Tired'],
       correct: 1,
       feedback: 'Butterflies in the stomach are very common before trying something brave and new.'
     }
   ];
 
-  // 2. Memory Match Game State
+  // 2. Memory Match Cards (Using AnimalAvatars instead of emojis)
   interface MemoryCard {
     id: number;
-    symbol: string;
+    animalId: 'otter' | 'owl' | 'fox' | 'turtle' | 'bear' | 'dolphin';
     label: string;
     flipped: boolean;
     matched: boolean;
   }
 
-  const initialSymbols = [
-    { symbol: '🦦', label: 'Otter' },
-    { symbol: '🦉', label: 'Owl' },
-    { symbol: '🦊', label: 'Fox' },
-    { symbol: '🐢', label: 'Turtle' },
-    { symbol: '🐻', label: 'Bear' },
-    { symbol: '🐬', label: 'Dolphin' }
+  const initialAnimals: Array<{ id: 'otter' | 'owl' | 'fox' | 'turtle' | 'bear' | 'dolphin'; label: string }> = [
+    { id: 'otter', label: 'Otter' },
+    { id: 'owl', label: 'Owl' },
+    { id: 'fox', label: 'Fox' },
+    { id: 'turtle', label: 'Turtle' },
+    { id: 'bear', label: 'Bear' },
+    { id: 'dolphin', label: 'Dolphin' }
   ];
 
   const buildMemoryDeck = (): MemoryCard[] => {
     const deck: MemoryCard[] = [];
     let counter = 0;
-    initialSymbols.forEach((item) => {
-      deck.push({ id: counter++, symbol: item.symbol, label: item.label, flipped: false, matched: false });
-      deck.push({ id: counter++, symbol: item.symbol, label: item.label, flipped: false, matched: false });
+    initialAnimals.forEach((item) => {
+      deck.push({ id: counter++, animalId: item.id, label: item.label, flipped: false, matched: false });
+      deck.push({ id: counter++, animalId: item.id, label: item.label, flipped: false, matched: false });
     });
-    // Friendly shuffle
     return deck.sort(() => Math.random() - 0.5);
   };
 
@@ -101,51 +99,58 @@ export const Games: React.FC = () => {
   const [shapeFeedback, setShapeFeedback] = useState<string | null>(null);
 
   const shapeChallenges = [
-    { targetLabel: 'Teal Circle', color: '#0d8276', shape: 'circle' },
-    { targetLabel: 'Sage Square', color: '#417558', shape: 'square' },
-    { targetLabel: 'Sky Blue Triangle', color: '#0284c7', shape: 'triangle' },
-    { targetLabel: 'Orange Circle', color: '#d97706', shape: 'circle' },
-    { targetLabel: 'Teal Square', color: '#0d8276', shape: 'square' }
+    { targetLabel: 'Teal Circle', color: '#0d8276', shape: 'circle' as const },
+    { targetLabel: 'Sage Square', color: '#417558', shape: 'square' as const },
+    { targetLabel: 'Sky Blue Triangle', color: '#0284c7', shape: 'triangle' as const },
+    { targetLabel: 'Orange Circle', color: '#d97706', shape: 'circle' as const },
+    { targetLabel: 'Teal Square', color: '#0d8276', shape: 'square' as const }
   ];
 
   const shapeGridOptions = [
-    { label: 'Teal Circle', color: '#0d8276', shape: 'circle' },
-    { label: 'Sage Square', color: '#417558', shape: 'square' },
-    { label: 'Sky Blue Triangle', color: '#0284c7', shape: 'triangle' },
-    { label: 'Orange Circle', color: '#d97706', shape: 'circle' },
-    { label: 'Teal Square', color: '#0d8276', shape: 'square' },
-    { label: 'Sage Triangle', color: '#417558', shape: 'triangle' }
+    { label: 'Teal Circle', color: '#0d8276', shape: 'circle' as const },
+    { label: 'Sage Square', color: '#417558', shape: 'square' as const },
+    { label: 'Sky Blue Triangle', color: '#0284c7', shape: 'triangle' as const },
+    { label: 'Orange Circle', color: '#d97706', shape: 'circle' as const },
+    { label: 'Teal Square', color: '#0d8276', shape: 'square' as const },
+    { label: 'Sage Triangle', color: '#417558', shape: 'triangle' as const }
   ];
 
-  // 4. Pattern Sequence Builder State
+  // 4. Pattern Sequence Builder State (Using GameTokens instead of emojis)
   const [patternRound, setPatternRound] = useState(0);
   const [patternScore, setPatternScore] = useState(0);
   const [patternFeedback, setPatternFeedback] = useState<string | null>(null);
 
-  const patternChallenges = [
+  interface PatternChallenge {
+    sequence: GameTokenType[];
+    options: GameTokenType[];
+    correct: GameTokenType;
+    rule: string;
+  }
+
+  const patternChallenges: PatternChallenge[] = [
     {
-      sequence: ['🔵', '🟧', '🔵', '🟧'],
-      options: ['🔵', '🟧', '🟢'],
-      correct: '🔵',
-      rule: 'Alternating Blue Circle and Orange Square'
+      sequence: ['circle', 'square', 'circle', 'square'],
+      options: ['circle', 'square', 'triangle'],
+      correct: 'circle',
+      rule: 'Alternating Circle and Square'
     },
     {
-      sequence: ['🟢', '🟢', '🔵', '🟢', '🟢'],
-      options: ['🟢', '🔵', '🟧'],
-      correct: '🔵',
-      rule: 'Two Green Circles followed by One Blue Circle'
+      sequence: ['leaf', 'leaf', 'water', 'leaf', 'leaf'],
+      options: ['leaf', 'water', 'sun'],
+      correct: 'water',
+      rule: 'Two Leaves followed by One Water Drop'
     },
     {
-      sequence: ['⭐', '🌙', '⭐', '🌙'],
-      options: ['⭐', '🌙', '☀️'],
-      correct: '⭐',
-      rule: 'Star then Moon pattern'
+      sequence: ['sun', 'pebble', 'sun', 'pebble'],
+      options: ['sun', 'pebble', 'diamond'],
+      correct: 'sun',
+      rule: 'Sun and Pebble sequence'
     },
     {
-      sequence: ['🍃', '💧', '☀️', '🍃', '💧'],
-      options: ['🍃', '☀️', '💧'],
-      correct: '☀️',
-      rule: 'Leaf, Water Drop, Sun rhythm'
+      sequence: ['leaf', 'water', 'sun', 'leaf', 'water'],
+      options: ['leaf', 'sun', 'water'],
+      correct: 'sun',
+      rule: 'Leaf, Water, Sun rhythm'
     }
   ];
 
@@ -179,7 +184,8 @@ export const Games: React.FC = () => {
 
     if (settings.soundEffects) calmSound.playTap(true);
 
-    const newDeck = memoryDeck.map((c, i) => (i === index ? { ...c, flipped: true } : c));
+    const newDeck = [...memoryDeck];
+    newDeck[index].flipped = true;
     setMemoryDeck(newDeck);
 
     const newFlipped = [...flippedCards, index];
@@ -188,29 +194,33 @@ export const Games: React.FC = () => {
     if (newFlipped.length === 2) {
       setMemoryMoves((m) => m + 1);
       const [firstIdx, secondIdx] = newFlipped;
-      if (newDeck[firstIdx].label === newDeck[secondIdx].label) {
-        // Match!
-        const matchedDeck = newDeck.map((c, i) =>
-          i === firstIdx || i === secondIdx ? { ...c, matched: true } : c
-        );
-        setMemoryDeck(matchedDeck);
-        setMemoryMatches((m) => m + 1);
-        setFlippedCards([]);
-        if (settings.soundEffects) calmSound.playSuccess(true);
-
-        if (memoryMatches + 1 === initialSymbols.length) {
-          // Finished!
-          const updated = recordGameCompleted('memory-match', 10);
-          setProgress(updated);
-        }
-      } else {
-        // No match: flip back
+      if (newDeck[firstIdx].animalId === newDeck[secondIdx].animalId) {
+        // Matched
         setTimeout(() => {
-          setMemoryDeck((prev) =>
-            prev.map((c, i) =>
-              i === firstIdx || i === secondIdx ? { ...c, flipped: false } : c
-            )
-          );
+          const matchedDeck = [...newDeck];
+          matchedDeck[firstIdx].matched = true;
+          matchedDeck[secondIdx].matched = true;
+          setMemoryDeck(matchedDeck);
+          setFlippedCards([]);
+          setMemoryMatches((prev) => {
+            const next = prev + 1;
+            if (next === initialAnimals.length) {
+              const updated = recordGameCompleted('memory-match', initialAnimals.length);
+              setProgress(updated);
+              if (settings.soundEffects) calmSound.playSuccess(true);
+            } else {
+              if (settings.soundEffects) calmSound.playChime(true, 528);
+            }
+            return next;
+          });
+        }, 400);
+      } else {
+        // Not matched, flip back
+        setTimeout(() => {
+          const resetDeck = [...newDeck];
+          resetDeck[firstIdx].flipped = false;
+          resetDeck[secondIdx].flipped = false;
+          setMemoryDeck(resetDeck);
           setFlippedCards([]);
         }, 900);
       }
@@ -219,107 +229,109 @@ export const Games: React.FC = () => {
 
   return (
     <div className="games-page">
-      <section className="page-header">
-        <h2 className="page-title">Playful Practice</h2>
+      {/* Page Header */}
+      <section className="page-header" style={{ marginBottom: '1.25rem' }}>
+        <h1 className="page-title">Games</h1>
         <p className="page-description">
-          Low-pressure, interactive educational games designed for emotional recognition, pattern matching, and memory.
+          Low-pressure, engaging games for memory, emotional awareness, and pattern reasoning.
         </p>
       </section>
 
-      {/* Games Showcase Grid */}
-      <section style={{ marginBottom: '2rem' }}>
-        <div className="grid-2">
-          {games.map((game) => {
-            const isPlayed = progress.completedGames.includes(game.id);
-            const highScore = progress.gameHighScores[game.id];
-            const GameIcon =
-              game.type === 'feelings-quiz'
-                ? Smile
-                : game.type === 'memory-match'
-                ? Puzzle
-                : game.type === 'shape-sort'
-                ? Compass
-                : Gamepad2;
+      {/* Game Cards Grid */}
+      <div className="grid-2" style={{ gap: '1.25rem', marginBottom: '2rem' }}>
+        {games.map((game) => {
+          const isCompleted = progress.completedGames.includes(game.id);
+          const highScore = progress.gameHighScores[game.id];
 
-            return (
-              <Card
-                key={game.id}
-                accent="default"
-                interactive
-                onClick={() => handleOpenGame(game)}
-                style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
+          return (
+            <Card
+              key={game.id}
+              accent={game.accent}
+              interactive
+              onClick={() => handleOpenGame(game)}
+              style={{ padding: '1.25rem' }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginBottom: '0.5rem'
+                }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.65rem' }}>
-                  <div
+                <span className={`badge badge-${game.accent}`}>
+                  {game.type === 'feelings-quiz'
+                    ? 'Social Perspective'
+                    : game.type === 'memory-match'
+                    ? 'Working Memory'
+                    : game.type === 'shape-sort'
+                    ? 'Visual Focus'
+                    : 'Pattern Reasoning'}
+                </span>
+
+                {isCompleted && (
+                  <span
                     style={{
-                      width: '36px',
-                      height: '36px',
-                      borderRadius: 'var(--radius-sm)',
-                      backgroundColor:
-                        game.accent === 'teal'
-                          ? 'var(--teal-surface)'
-                          : game.accent === 'sage'
-                          ? 'var(--sage-surface)'
-                          : game.accent === 'blue'
-                          ? 'var(--blue-surface)'
-                          : 'var(--orange-surface)',
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'center',
-                      color:
-                        game.accent === 'teal'
-                          ? 'var(--teal-primary)'
-                          : game.accent === 'sage'
-                          ? 'var(--sage-primary)'
-                          : game.accent === 'blue'
-                          ? 'var(--blue-primary)'
-                          : 'var(--orange-primary)'
+                      gap: '0.25rem',
+                      fontSize: '0.75rem',
+                      color: 'var(--teal-primary)',
+                      fontWeight: 600
                     }}
                   >
-                    <GameIcon size={18} aria-hidden="true" />
-                  </div>
-
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                    {isPlayed && (
-                      <span className="badge badge-teal" style={{ textTransform: 'none' }}>
-                        <CheckCircle2 size={11} />
-                        <span>Score: {highScore || 'Done'}</span>
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '0.35rem' }}>
-                  {game.title}
-                </h3>
-
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.45, flex: 1, marginBottom: '0.75rem' }}>
-                  {game.description}
-                </p>
-
-                <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap', marginBottom: '0.85rem' }}>
-                  {game.skillsTrained.map((skill) => (
-                    <span key={skill} className="badge badge-neutral" style={{ fontSize: '0.7rem' }}>
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-
-                <div style={{ borderTop: '1px solid var(--border-light)', paddingTop: '0.65rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <span style={{ fontSize: '0.8rem', color: 'var(--text-subtle)' }}>
-                    Accessible & Gentle
+                    <CheckCircle2 size={13} aria-hidden="true" />
+                    <span>Completed</span>
                   </span>
-                  <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--teal-primary)' }}>
-                    Play Game &rarr;
-                  </span>
-                </div>
-              </Card>
-            );
-          })}
-        </div>
-      </section>
+                )}
+              </div>
 
-      {/* Interactive Playable Game Modal */}
+              <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '0.4rem' }}>
+                {game.title}
+              </h3>
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1rem', lineHeight: 1.45 }}>
+                {game.description}
+              </p>
+
+              <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
+                {game.skillsTrained.map((sk) => (
+                  <span
+                    key={sk}
+                    style={{
+                      fontSize: '0.75rem',
+                      padding: '2px 7px',
+                      backgroundColor: 'var(--bg-subtle)',
+                      borderRadius: 'var(--radius-sm)',
+                      color: 'var(--text-muted)'
+                    }}
+                  >
+                    {sk}
+                  </span>
+                ))}
+              </div>
+
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  borderTop: '1px solid var(--border-light)',
+                  paddingTop: '0.75rem'
+                }}
+              >
+                <span style={{ fontSize: '0.8rem', color: 'var(--text-subtle)' }}>
+                  {highScore ? `Best record: ${highScore}` : 'Play at your own pace'}
+                </span>
+                <button className="btn btn-primary btn-sm">
+                  <span>Enter Game</span>
+                </button>
+              </div>
+            </Card>
+          );
+        })}
+      </div>
+
+      {/* Active Playable Game Modal / Drawer */}
       {selectedGame && (
         <div
           className="modal-overlay"
@@ -330,13 +342,17 @@ export const Games: React.FC = () => {
         >
           <div
             className="modal-container"
-            style={{ maxWidth: '640px', padding: '1.75rem' }}
             onClick={(e) => e.stopPropagation()}
+            style={{ maxWidth: '640px', width: '95%' }}
           >
+            {/* Modal Header */}
             <div className="modal-header">
-              <h3 id="game-modal-title" className="modal-title">
-                {selectedGame.title}
-              </h3>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Gamepad2 size={20} style={{ color: `var(--${selectedGame.accent}-primary)` }} />
+                <h3 id="game-modal-title" className="modal-title">
+                  {selectedGame.title}
+                </h3>
+              </div>
               <button
                 className="icon-btn"
                 onClick={() => setSelectedGame(null)}
@@ -346,47 +362,58 @@ export const Games: React.FC = () => {
               </button>
             </div>
 
-            {/* GAME 1: FEELINGS DETECTIVE QUIZ */}
+            {/* GAME 1: FEELINGS DETECTIVE */}
             {selectedGame.type === 'feelings-quiz' && (
               <div>
                 {!quizFinished ? (
                   <div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', fontSize: '0.85rem', color: 'var(--text-subtle)' }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        marginBottom: '1rem',
+                        fontSize: '0.85rem',
+                        color: 'var(--text-subtle)'
+                      }}
+                    >
                       <span>Scenario {quizRound + 1} of {quizScenarios.length}</span>
                       <span>Score: {quizScore}</span>
                     </div>
 
                     <div
                       style={{
-                        backgroundColor: 'var(--teal-surface)',
-                        border: '1px solid var(--teal-border)',
-                        padding: '1.25rem',
+                        padding: '1rem',
+                        backgroundColor: 'var(--bg-subtle)',
                         borderRadius: 'var(--radius-md)',
-                        marginBottom: '1.25rem'
+                        marginBottom: '1.25rem',
+                        fontSize: '0.95rem',
+                        lineHeight: 1.5,
+                        color: 'var(--text-main)'
                       }}
                     >
-                      <p style={{ fontSize: '0.95rem', color: 'var(--text-main)', lineHeight: 1.55, marginBottom: '0.75rem' }}>
-                        "{quizScenarios[quizRound].story}"
-                      </p>
-                      <span style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--teal-text)' }}>
-                        {quizScenarios[quizRound].question}
-                      </span>
+                      {quizScenarios[quizRound].story}
                     </div>
+
+                    <h4 style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-main)', marginBottom: '0.75rem' }}>
+                      {quizScenarios[quizRound].question}
+                    </h4>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.25rem' }}>
                       {quizScenarios[quizRound].options.map((opt, idx) => {
-                        const isChosen = quizAnswerSelected === idx;
                         const isCorrect = idx === quizScenarios[quizRound].correct;
+                        const isChosen = quizAnswerSelected === idx;
+
                         let borderColor = 'var(--border-light)';
                         let bg = 'var(--bg-surface)';
 
                         if (quizAnswerSelected !== null) {
                           if (isCorrect) {
                             borderColor = 'var(--sage-primary)';
-                            bg = '#e3f3e8';
+                            bg = 'var(--sage-surface)';
                           } else if (isChosen) {
                             borderColor = 'var(--orange-primary)';
-                            bg = '#feefe7';
+                            bg = 'var(--orange-surface)';
                           }
                         }
 
@@ -432,7 +459,7 @@ export const Games: React.FC = () => {
                           marginBottom: '1.25rem'
                         }}
                       >
-                        <strong>Detective insight:</strong> {quizScenarios[quizRound].feedback}
+                        <strong>Detective insight: </strong>{quizScenarios[quizRound].feedback}
                       </div>
                     )}
 
@@ -490,8 +517,17 @@ export const Games: React.FC = () => {
             {/* GAME 2: MEMORY MATCH */}
             {selectedGame.type === 'memory-match' && (
               <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', fontSize: '0.85rem', color: 'var(--text-subtle)' }}>
-                  <span>Pairs Matched: {memoryMatches} / {initialSymbols.length}</span>
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: '1rem',
+                    fontSize: '0.85rem',
+                    color: 'var(--text-subtle)'
+                  }}
+                >
+                  <span>Pairs Matched: {memoryMatches} / {initialAnimals.length}</span>
                   <span>Turns: {memoryMoves}</span>
                 </div>
 
@@ -508,7 +544,7 @@ export const Games: React.FC = () => {
                       key={card.id}
                       onClick={() => handleCardClick(index)}
                       style={{
-                        height: '75px',
+                        height: '80px',
                         borderRadius: 'var(--radius-md)',
                         border: card.matched ? '2px solid var(--sage-primary)' : '1px solid var(--border-medium)',
                         backgroundColor: card.flipped || card.matched ? 'var(--sage-surface)' : 'var(--bg-surface)',
@@ -517,7 +553,6 @@ export const Games: React.FC = () => {
                         alignItems: 'center',
                         justifyContent: 'center',
                         cursor: card.matched ? 'default' : 'pointer',
-                        fontSize: '1.75rem',
                         transition: 'all 0.2s ease',
                         boxShadow: 'var(--shadow-xs)'
                       }}
@@ -525,20 +560,29 @@ export const Games: React.FC = () => {
                     >
                       {card.flipped || card.matched ? (
                         <>
-                          <span>{card.symbol}</span>
-                          <span style={{ fontSize: '0.65rem', color: 'var(--sage-text)', fontWeight: 600 }}>
+                          <AnimalAvatar id={card.animalId} size={38} showBg={false} />
+                          <span style={{ fontSize: '0.65rem', color: 'var(--sage-text)', fontWeight: 600, marginTop: '2px' }}>
                             {card.label}
                           </span>
                         </>
                       ) : (
-                        <span style={{ fontSize: '1rem', color: 'var(--text-subtle)' }}>?</span>
+                        <span style={{ fontSize: '1rem', color: 'var(--text-subtle)', fontWeight: 700 }}>?</span>
                       )}
                     </button>
                   ))}
                 </div>
 
-                {memoryMatches === initialSymbols.length && (
-                  <div style={{ padding: '0.85rem', backgroundColor: 'var(--sage-surface)', borderRadius: 'var(--radius-md)', border: '1px solid var(--sage-border)', textAlign: 'center', marginBottom: '1.25rem' }}>
+                {memoryMatches === initialAnimals.length && (
+                  <div
+                    style={{
+                      padding: '0.85rem',
+                      backgroundColor: 'var(--sage-surface)',
+                      borderRadius: 'var(--radius-md)',
+                      border: '1px solid var(--sage-border)',
+                      textAlign: 'center',
+                      marginBottom: '1.25rem'
+                    }}
+                  >
                     <h5 style={{ fontWeight: 700, color: 'var(--sage-text)', fontSize: '1rem', marginBottom: '0.2rem' }}>
                       All Friendly Pairs Matched!
                     </h5>
@@ -690,23 +734,49 @@ export const Games: React.FC = () => {
                     marginBottom: '1.5rem'
                   }}
                 >
-                  <span style={{ fontSize: '0.8rem', color: 'var(--orange-text)', fontWeight: 600, display: 'block', marginBottom: '0.5rem' }}>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--orange-text)', fontWeight: 600, display: 'block', marginBottom: '0.75rem' }}>
                     WHAT COMES NEXT IN THIS RHYTHM?
                   </span>
-                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.75rem', fontSize: '1.75rem' }}>
-                    {patternChallenges[patternRound].sequence.map((sym, i) => (
-                      <span key={i}>{sym}</span>
+                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.85rem' }}>
+                    {patternChallenges[patternRound].sequence.map((type, i) => (
+                      <div
+                        key={i}
+                        style={{
+                          padding: '6px',
+                          backgroundColor: '#FFFFFF',
+                          borderRadius: 'var(--radius-sm)',
+                          border: '1px solid var(--border-light)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}
+                      >
+                        <GameToken type={type} size={32} />
+                      </div>
                     ))}
-                    <span style={{ width: '40px', height: '40px', border: '2px dashed var(--orange-primary)', borderRadius: 'var(--radius-sm)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.25rem', color: 'var(--orange-primary)' }}>
+                    <div
+                      style={{
+                        width: '46px',
+                        height: '46px',
+                        border: '2px dashed var(--orange-primary)',
+                        borderRadius: 'var(--radius-sm)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '1.25rem',
+                        color: 'var(--orange-primary)',
+                        fontWeight: 700
+                      }}
+                    >
                       ?
-                    </span>
+                    </div>
                   </div>
                 </div>
 
                 <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-                  {patternChallenges[patternRound].options.map((opt) => (
+                  {patternChallenges[patternRound].options.map((opt, optIdx) => (
                     <button
-                      key={opt}
+                      key={optIdx}
                       onClick={() => {
                         const isCorrect = opt === patternChallenges[patternRound].correct;
                         if (isCorrect) {
@@ -728,11 +798,10 @@ export const Games: React.FC = () => {
                         }
                       }}
                       style={{
-                        width: '64px',
-                        height: '64px',
-                        fontSize: '1.75rem',
+                        width: '68px',
+                        height: '68px',
                         borderRadius: 'var(--radius-md)',
-                        border: '1px solid var(--border-medium)',
+                        border: '1.5px solid var(--border-medium)',
                         backgroundColor: 'var(--bg-surface)',
                         cursor: 'pointer',
                         display: 'flex',
@@ -740,8 +809,9 @@ export const Games: React.FC = () => {
                         justifyContent: 'center',
                         boxShadow: 'var(--shadow-xs)'
                       }}
+                      aria-label={`Option: ${opt}`}
                     >
-                      {opt}
+                      <GameToken type={opt} size={36} />
                     </button>
                   ))}
                 </div>

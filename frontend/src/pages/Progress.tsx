@@ -46,9 +46,9 @@ export const Progress: React.FC = () => {
       <section className="page-header">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
           <div>
-            <h2 className="page-title">{profile.name}'s Journey & Exploration Log</h2>
+            <h1 className="page-title">{profile.name}'s Progress</h1>
             <p className="page-description">
-              Celebrating your curiosity, calming practices, and reading milestones.
+              A quiet record of your reading, calming breaks, and personal achievements.
             </p>
           </div>
 

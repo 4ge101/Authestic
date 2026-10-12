@@ -4,33 +4,33 @@ import {
   Home,
   BookOpen,
   Sparkles,
+  Heart,
   GraduationCap,
   Gamepad2,
   TrendingUp,
   User,
-  Settings,
-  HeartHandshake
+  ShieldCheck
 } from 'lucide-react';
 
 export const Sidebar: React.FC = () => {
   const navItems = [
     { to: '/', label: 'Home', icon: Home },
     { to: '/stories', label: 'Stories', icon: BookOpen },
+    { to: '/garden', label: 'Feelings', icon: Heart },
     { to: '/activities', label: 'Activities', icon: Sparkles },
     { to: '/learning', label: 'Learning', icon: GraduationCap },
     { to: '/games', label: 'Games', icon: Gamepad2 },
     { to: '/progress', label: 'Progress', icon: TrendingUp },
-    { to: '/profile', label: 'Profile', icon: User },
-    { to: '/settings', label: 'Settings', icon: Settings }
+    { to: '/settings', label: 'Profile & Settings', icon: User }
   ];
 
   const mobileNavItems = [
     { to: '/', label: 'Home', icon: Home },
     { to: '/stories', label: 'Stories', icon: BookOpen },
-    { to: '/activities', label: 'Calm', icon: Sparkles },
-    { to: '/learning', label: 'Learn', icon: GraduationCap },
-    { to: '/games', label: 'Games', icon: Gamepad2 },
-    { to: '/progress', label: 'Progress', icon: TrendingUp }
+    { to: '/garden', label: 'Feelings', icon: Heart },
+    { to: '/activities', label: 'Activities', icon: Sparkles },
+    { to: '/learning', label: 'Learning', icon: GraduationCap },
+    { to: '/games', label: 'Games', icon: Gamepad2 }
   ];
 
   return (
@@ -38,12 +38,12 @@ export const Sidebar: React.FC = () => {
       {/* Desktop Persistent Sidebar */}
       <aside className="sidebar" aria-label="Main Navigation">
         <div className="sidebar-header">
-          <div className="brand-icon" aria-hidden="true">
+          <div className="brand-mark" aria-hidden="true">
             A
           </div>
-          <div>
-            <div className="brand-title">Authsetic</div>
-            <span className="brand-tagline">Calm learning space</span>
+          <div className="brand-text">
+            <span className="brand-title">Authsetic</span>
+            <span className="brand-tagline">Learning & Calming Space</span>
           </div>
         </div>
 
@@ -65,13 +65,13 @@ export const Sidebar: React.FC = () => {
         </nav>
 
         <div className="sidebar-footer">
-          <div className="sidebar-care-card">
-            <span className="sidebar-care-title">
-              <HeartHandshake size={14} aria-hidden="true" />
-              <span>Safe & Calm Space</span>
-            </span>
-            <p>Thoughtfully paced resources for children and caregivers.</p>
-          </div>
+          <NavLink
+            to="/caregiver"
+            className={({ isActive }) => `sidebar-caregiver-link ${isActive ? 'active' : ''}`}
+          >
+            <ShieldCheck size={16} aria-hidden="true" />
+            <span>Caregiver View</span>
+          </NavLink>
         </div>
       </aside>
 

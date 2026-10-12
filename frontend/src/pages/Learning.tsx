@@ -69,10 +69,10 @@ export const Learning: React.FC = () => {
 
   return (
     <div className="learning-page">
-      <section className="page-header">
-        <h2 className="page-title">Emotional Learning</h2>
+      <section className="page-header" style={{ marginBottom: '1.25rem' }}>
+        <h1 className="page-title">Learning</h1>
         <p className="page-description">
-          Practical life skills, neurodiversity appreciation, communication tips, and step-by-step problem-solving.
+          Practical everyday lessons on communication, boundaries, unique thinking, and calm routines.
         </p>
       </section>
 

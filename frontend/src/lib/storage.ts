@@ -3,6 +3,56 @@ import type { UserProfile, UserSettings, UserProgress, JournalEntry } from './ty
 const PROFILE_KEY = 'authsetic_user_profile';
 const SETTINGS_KEY = 'authsetic_user_settings';
 const PROGRESS_KEY = 'authsetic_user_progress';
+const COMPANION_KEY = 'authsetic_active_companion';
+const COMPANION_POS_KEY = 'authsetic_companion_nav_pos';
+
+export type CompanionAnimal = 'monkey' | 'bird' | 'cat' | 'dog';
+
+export function loadCompanionAnimal(): CompanionAnimal {
+  if (typeof window === 'undefined') return 'monkey';
+  try {
+    const raw = localStorage.getItem(COMPANION_KEY);
+    if (raw === 'bird' || raw === 'cat' || raw === 'dog' || raw === 'monkey') {
+      return raw;
+    }
+    return 'monkey'; // Default is monkey
+  } catch {
+    return 'monkey';
+  }
+}
+
+export function saveCompanionAnimal(animal: CompanionAnimal): void {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(COMPANION_KEY, animal);
+    window.dispatchEvent(new CustomEvent('authsetic_companion_changed', { detail: animal }));
+  } catch {
+    // Ignore
+  }
+}
+
+export function loadCompanionPos(): number {
+  if (typeof window === 'undefined') return 30; // 30% along nav
+  try {
+    const raw = localStorage.getItem(COMPANION_POS_KEY);
+    if (raw) {
+      const val = parseFloat(raw);
+      if (!isNaN(val) && val >= 0 && val <= 100) return val;
+    }
+    return 30;
+  } catch {
+    return 30;
+  }
+}
+
+export function saveCompanionPos(pos: number): void {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(COMPANION_POS_KEY, pos.toString());
+  } catch {
+    // Ignore
+  }
+}
 
 export const defaultProfile: UserProfile = {
   name: 'Leo',
@@ -14,6 +64,7 @@ export const defaultProfile: UserProfile = {
 };
 
 export const defaultSettings: UserSettings = {
+  theme: 'light',
   textSize: 'standard',
   reducedMotion: false,
   soundEffects: true,
@@ -98,6 +149,9 @@ export function saveSettings(settings: UserSettings): void {
 export function applySettingsToDOM(settings: UserSettings): void {
   if (typeof document === 'undefined') return;
   const root = document.documentElement;
+
+  // Theme (Light / Dark)
+  root.setAttribute('data-theme', settings.theme || 'light');
 
   // Text size
   root.setAttribute('data-text-size', settings.textSize);

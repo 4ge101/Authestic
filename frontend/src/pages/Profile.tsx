@@ -9,6 +9,7 @@ import {
   ShieldCheck
 } from 'lucide-react';
 import { Card } from '../components/Card.tsx';
+import { AnimalAvatar } from '../components/AnimalAvatars.tsx';
 import { avatars, stories, activities } from '../data.ts';
 import type { UserProfile } from '../lib/types.ts';
 import {
@@ -69,18 +70,6 @@ export const Profile: React.FC = () => {
               >
                 {avatars.map((av) => {
                   const isSelected = profile.avatar === av.id;
-                  const emoji =
-                    av.id === 'otter'
-                      ? '🦦'
-                      : av.id === 'owl'
-                      ? '🦉'
-                      : av.id === 'fox'
-                      ? '🦊'
-                      : av.id === 'turtle'
-                      ? '🐢'
-                      : av.id === 'bear'
-                      ? '🐻'
-                      : '🐬';
 
                   return (
                     <button
@@ -98,11 +87,13 @@ export const Profile: React.FC = () => {
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
-                        gap: '0.3rem',
+                        gap: '0.4rem',
                         cursor: 'pointer'
                       }}
+                      aria-pressed={isSelected}
+                      aria-label={`Select ${av.name}`}
                     >
-                      <span style={{ fontSize: '1.65rem' }}>{emoji}</span>
+                      <AnimalAvatar id={av.id} size={42} showBg={false} />
                       <span style={{ fontSize: '0.75rem', fontWeight: 600, color: isSelected ? 'var(--teal-text)' : 'var(--text-main)', textAlign: 'center' }}>
                         {av.name.split(' ')[0]}
                       </span>

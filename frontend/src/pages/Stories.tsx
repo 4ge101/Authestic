@@ -109,10 +109,10 @@ export const Stories: React.FC = () => {
   return (
     <div className="stories-page">
       {/* Header and intro */}
-      <section className="page-header">
-        <h2 className="page-title">Story Library</h2>
+      <section className="page-header" style={{ marginBottom: '1.25rem' }}>
+        <h1 className="page-title">Stories</h1>
         <p className="page-description">
-          Gentle, illustrated stories that explore emotions, change, friendships, and peaceful routines.
+          Thoughtfully written, illustrated stories exploring emotions, courage, and daily life.
         </p>
       </section>
 

@@ -95,6 +95,7 @@ export interface UserProfile {
 }
 
 export interface UserSettings {
+  theme?: 'light' | 'dark';
   textSize: 'standard' | 'large' | 'xlarge';
   reducedMotion: boolean;
   soundEffects: boolean;

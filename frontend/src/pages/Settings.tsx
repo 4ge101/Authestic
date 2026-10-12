@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Eye,
   Type,
@@ -165,6 +166,27 @@ export const Settings: React.FC = () => {
               <Eye size={18} style={{ color: 'var(--sage-primary)' }} />
               <span>Sensory & Motion Preferences</span>
             </h3>
+
+            {/* Theme Mode (Light / Dark) */}
+            <div className="form-group" style={{ marginBottom: '1rem' }}>
+              <label className="form-label">Theme Mode (Sensory Lighting)</label>
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                {[
+                  { id: 'light', label: 'Daylight (Warm Light)' },
+                  { id: 'dark', label: 'Calm Night (Dark Mode)' }
+                ].map((th) => (
+                  <button
+                    key={th.id}
+                    type="button"
+                    onClick={() => updateSetting('theme', th.id as 'light' | 'dark')}
+                    className={`btn btn-sm ${settings.theme === th.id || (!settings.theme && th.id === 'light') ? 'btn-primary' : 'btn-secondary'}`}
+                    style={{ flex: 1, fontSize: '0.8rem' }}
+                  >
+                    {th.label}
+                  </button>
+                ))}
+              </div>
+            </div>
 
             {/* Reduced Motion Toggle */}
             <div className="form-group" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -340,6 +362,14 @@ export const Settings: React.FC = () => {
                 </p>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                  <Link
+                    to="/caregiver"
+                    className="btn btn-primary btn-sm"
+                    style={{ justifyContent: 'flex-start' }}
+                  >
+                    <span>Open Caregiver & Educator Dashboard</span>
+                  </Link>
+
                   <button className="btn btn-secondary btn-sm" onClick={handleExportData} style={{ justifyContent: 'flex-start' }}>
                     <Download size={15} />
                     <span>Export Progress Data (JSON)</span>

@@ -8,11 +8,15 @@ import {
   X,
   Sparkles,
   BookOpen,
-  GraduationCap
+  GraduationCap,
+  Sun,
+  Moon
 } from 'lucide-react';
-import { loadProfile, loadSettings, saveSettings } from '../lib/storage.ts';
+import { loadProfile, loadSettings, saveSettings, applySettingsToDOM } from '../lib/storage.ts';
+import type { UserSettings } from '../lib/types.ts';
 import { calmSound } from '../lib/audio.ts';
 import { stories, activities, lessons } from '../data.ts';
+import { ThreeCompanion } from './ThreeCompanion.tsx';
 
 export const Navbar: React.FC = () => {
   const location = useLocation();
@@ -28,21 +32,26 @@ export const Navbar: React.FC = () => {
   const getPageTitle = () => {
     switch (location.pathname) {
       case '/':
-        return 'Daily Dashboard';
+        return 'Home';
       case '/stories':
-        return 'Story Library';
+        return 'Stories';
       case '/activities':
-        return 'Calming Activities';
+        return 'Activities';
+      case '/garden':
+      case '/feelings':
+        return 'Feelings & Emotions';
       case '/learning':
-        return 'Emotional Learning';
+        return 'Learning';
       case '/games':
-        return 'Playful Practice';
+        return 'Games';
       case '/progress':
-        return 'My Journey & Progress';
+        return 'Progress';
       case '/profile':
-        return 'Child Profile';
+        return 'Profile';
       case '/settings':
-        return 'Settings & Accessibility';
+        return 'Settings';
+      case '/caregiver':
+        return 'Caregiver View';
       default:
         return 'Authsetic';
     }
@@ -54,6 +63,17 @@ export const Navbar: React.FC = () => {
     saveSettings(updated);
     if (updated.soundEffects) {
       calmSound.playChime(true, 528);
+    }
+  };
+
+  const handleToggleTheme = () => {
+    const newTheme: 'light' | 'dark' = settings.theme === 'dark' ? 'light' : 'dark';
+    const updated: UserSettings = { ...settings, theme: newTheme };
+    setSettings(updated);
+    saveSettings(updated);
+    applySettingsToDOM(updated);
+    if (updated.soundEffects) {
+      calmSound.playTap(true);
     }
   };
 
@@ -82,8 +102,10 @@ export const Navbar: React.FC = () => {
   return (
     <>
       <header className="navbar" role="banner">
-        <div className="navbar-left">
+        <div className="navbar-left" style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
           <h1 className="navbar-page-title">{getPageTitle()}</h1>
+          {/* Interactive 3D Companion sitting perched in navigation */}
+          <ThreeCompanion name="Pip" />
         </div>
 
         <div className="navbar-search" style={{ position: 'relative' }}>
@@ -224,6 +246,16 @@ export const Navbar: React.FC = () => {
             title={settings.soundEffects ? 'Soothing sounds enabled' : 'Sounds muted'}
           >
             {settings.soundEffects ? <Volume2 size={16} /> : <VolumeX size={16} />}
+          </button>
+
+          {/* Theme Toggle (Dark / Light) */}
+          <button
+            className={`icon-btn ${settings.theme === 'dark' ? 'active' : ''}`}
+            onClick={handleToggleTheme}
+            aria-label={settings.theme === 'dark' ? 'Switch to daylight theme' : 'Switch to calm night theme'}
+            title={settings.theme === 'dark' ? 'Switch to daylight theme' : 'Switch to calm night theme'}
+          >
+            {settings.theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
           </button>
 
           {/* Profile Quick Pill */}

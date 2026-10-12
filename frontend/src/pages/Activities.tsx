@@ -378,10 +378,10 @@ export const Activities: React.FC = () => {
 
   return (
     <div className="activities-page">
-      <section className="page-header">
-        <h2 className="page-title">Calming Activities</h2>
+      <section className="page-header" style={{ marginBottom: '1.25rem' }}>
+        <h1 className="page-title">Activities</h1>
         <p className="page-description">
-          Interactive sensory tools, guided breathing rhythms, gentle movement, and creative expression.
+          Guided sensory tools, rhythmic breathing, gentle movement, and mindful drawing.
         </p>
       </section>
 
