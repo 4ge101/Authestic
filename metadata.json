@@ -1,8 +1,0 @@
-{
-  "name": "Authsetic",
-  "description": "Accessible emotional learning, therapeutic storytelling, calming activities, and educational games for children and families.",
-  "permissions": [],
-  "capabilities": [
-    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
-  ]
-}
