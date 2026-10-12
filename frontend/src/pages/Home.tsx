@@ -34,8 +34,8 @@ export const Home: React.FC = () => {
     return 'Good evening';
   };
 
-  const featuredStory = stories[0]; // The Quiet Otter's Big Day
-  const featuredLesson = lessons[0]; // Understanding Big Emotions
+  const featuredStory = stories[0];
+  const featuredLesson = lessons[0];
   const activeMoodObj = moodOptions.find((m) => m.id === selectedMood);
 
   const handleMoodSelect = (moodId: string) => {
