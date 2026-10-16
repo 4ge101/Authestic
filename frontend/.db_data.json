@@ -1,0 +1,317 @@
+{
+  "users": [
+    {
+      "id": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "email": "admin@eshal.org",
+      "passwordHash": "$2b$10$kh.3Cmk.xybLahEGWo/MbuEjRTfu7Frhikk3Qbnyu61yZ8zNNMULW",
+      "name": "Eshal Admin",
+      "role": "admin",
+      "status": "active",
+      "emailVerified": true,
+      "avatar": "boy",
+      "lastLoginAt": "2026-10-16T17:58:34.212Z",
+      "createdAt": "2026-10-16T17:58:22.538Z",
+      "updatedAt": "2026-10-16T17:58:34.212Z"
+    },
+    {
+      "email": "testuser@example.com",
+      "passwordHash": "$2b$10$u32qMCaN4XmMHQ.jovuJou2afiSdk5Hsz15hwro8XVoS2aw7EJdV2",
+      "name": "Leo Learner",
+      "role": "user",
+      "status": "active",
+      "emailVerified": false,
+      "avatar": "boy",
+      "lastLoginAt": null,
+      "id": "c7099e92-cb46-4438-af4f-eef5c191ce55",
+      "createdAt": "2026-10-16T17:58:43.351Z",
+      "updatedAt": "2026-10-16T17:58:43.351Z"
+    }
+  ],
+  "sessions": [
+    {
+      "id": "b27823519137fea651e7943724b872023fbbf0dc4484e38592adf7db819818ff",
+      "userId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "curl/7.88.1",
+      "expiresAt": "2026-10-23T17:58:34.211Z",
+      "createdAt": "2026-10-16T17:58:34.211Z"
+    },
+    {
+      "id": "9d8b506dd560c453f427f47266437e8d759ad4dc5771d55273c56ab1780b8005",
+      "userId": "c7099e92-cb46-4438-af4f-eef5c191ce55",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "curl/7.88.1",
+      "expiresAt": "2026-10-23T17:58:43.352Z",
+      "createdAt": "2026-10-16T17:58:43.352Z"
+    }
+  ],
+  "verificationTokens": [
+    {
+      "token": "e20edbc797fead174c90bbecdaf163ac27e49d76aeb8fd5a",
+      "userId": "c7099e92-cb46-4438-af4f-eef5c191ce55",
+      "expiresAt": "2026-10-17T17:58:43.353Z",
+      "usedAt": null,
+      "createdAt": "2026-10-16T17:58:43.353Z"
+    }
+  ],
+  "resetTokens": [],
+  "preferences": [
+    {
+      "userId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "soundEnabled": true,
+      "reducedMotion": false,
+      "highContrast": false,
+      "theme": "sage",
+      "dailyGoalMinutes": 30,
+      "updatedAt": "2026-10-16T17:58:22.538Z"
+    },
+    {
+      "userId": "c7099e92-cb46-4438-af4f-eef5c191ce55",
+      "soundEnabled": true,
+      "reducedMotion": false,
+      "highContrast": false,
+      "theme": "sage",
+      "dailyGoalMinutes": 20,
+      "updatedAt": "2026-10-16T17:58:43.351Z"
+    }
+  ],
+  "goals": [
+    {
+      "id": "goal-1-c7099e92-cb46-4438-af4f-eef5c191ce55",
+      "userId": "c7099e92-cb46-4438-af4f-eef5c191ce55",
+      "title": "Morning Emotion Check-In",
+      "category": "communication",
+      "targetCount": 1,
+      "completedCount": 0,
+      "completed": false,
+      "date": "2026-10-16",
+      "createdAt": "2026-10-16T17:58:43.352Z"
+    },
+    {
+      "id": "goal-2-c7099e92-cb46-4438-af4f-eef5c191ce55",
+      "userId": "c7099e92-cb46-4438-af4f-eef5c191ce55",
+      "title": "Woodland Shape Puzzle",
+      "category": "focus",
+      "targetCount": 1,
+      "completedCount": 0,
+      "completed": false,
+      "date": "2026-10-16",
+      "createdAt": "2026-10-16T17:58:43.352Z"
+    },
+    {
+      "id": "goal-3-c7099e92-cb46-4438-af4f-eef5c191ce55",
+      "userId": "c7099e92-cb46-4438-af4f-eef5c191ce55",
+      "title": "Gentle Sensory Breathing",
+      "category": "sensory",
+      "targetCount": 1,
+      "completedCount": 0,
+      "completed": false,
+      "date": "2026-10-16",
+      "createdAt": "2026-10-16T17:58:43.352Z"
+    }
+  ],
+  "progress": [],
+  "content": [
+    {
+      "id": "act-feelings-faces",
+      "type": "activity",
+      "title": "Matching Friendly Faces",
+      "description": "Look at the gentle animal expressions and connect each emotion to the corresponding card.",
+      "category": "social",
+      "categoryName": "Social Understanding",
+      "ageRange": "4-7 yrs",
+      "difficulty": "Gentle",
+      "duration": "6 mins",
+      "status": "published",
+      "orderIndex": 1,
+      "details": {
+        "steps": 3,
+        "sensoryTags": [
+          "Calm Visuals",
+          "Audio Feedback"
+        ]
+      },
+      "createdAt": "2026-10-16T17:58:22.539Z",
+      "updatedAt": "2026-10-16T17:58:22.539Z"
+    },
+    {
+      "id": "act-breathing-bubble",
+      "type": "sensory",
+      "title": "Gentle Breathing Bubble",
+      "description": "A rhythmic, soft expanding sphere to assist with calm breathing, pacing, and focus regulation.",
+      "category": "sensory",
+      "categoryName": "Sensory Comfort",
+      "ageRange": "All Ages",
+      "difficulty": "Calm Pace",
+      "duration": "5 mins",
+      "status": "published",
+      "orderIndex": 2,
+      "details": {
+        "sensoryTags": [
+          "Gentle Breath",
+          "Audio Chimes",
+          "Visual Rhythm"
+        ]
+      },
+      "createdAt": "2026-10-16T17:58:22.539Z",
+      "updatedAt": "2026-10-16T17:58:22.539Z"
+    },
+    {
+      "id": "act-routine-morning",
+      "type": "life_skill",
+      "title": "Morning Routine Builder",
+      "description": "Step-by-step visual sequencing for waking up, brushing teeth, and getting dressed peacefully.",
+      "category": "routines",
+      "categoryName": "Daily Routines",
+      "ageRange": "3-6 yrs",
+      "difficulty": "Step-by-Step",
+      "duration": "8 mins",
+      "status": "published",
+      "orderIndex": 3,
+      "details": {
+        "sensoryTags": [
+          "Predictable",
+          "Low Audio",
+          "Checklist"
+        ]
+      },
+      "createdAt": "2026-10-16T17:58:22.539Z",
+      "updatedAt": "2026-10-16T17:58:22.539Z"
+    },
+    {
+      "id": "act-forest-puzzles",
+      "type": "activity",
+      "title": "Woodland Shape Matching",
+      "description": "Sort friendly pinecones, acorns, and river stones into their gentle shadow slots.",
+      "category": "focus",
+      "categoryName": "Visual Focus",
+      "ageRange": "4-8 yrs",
+      "difficulty": "Moderate",
+      "duration": "10 mins",
+      "status": "published",
+      "orderIndex": 4,
+      "details": {
+        "sensoryTags": [
+          "Pattern Recognition",
+          "Nature Motifs"
+        ]
+      },
+      "createdAt": "2026-10-16T17:58:22.539Z",
+      "updatedAt": "2026-10-16T17:58:22.539Z"
+    },
+    {
+      "id": "act-visual-feelings",
+      "type": "activity",
+      "title": "AAC Communication Tap Board",
+      "description": "High-clarity visual emotion and request symbols with clear speech synthesis for spontaneous communication.",
+      "category": "communication",
+      "categoryName": "AAC Communication",
+      "ageRange": "All Ages",
+      "difficulty": "Gentle",
+      "duration": "Unlimited",
+      "status": "published",
+      "orderIndex": 5,
+      "details": {
+        "sensoryTags": [
+          "AAC Cards",
+          "Speech Support",
+          "Instant Audio"
+        ]
+      },
+      "createdAt": "2026-10-16T17:58:22.539Z",
+      "updatedAt": "2026-10-16T17:58:22.539Z"
+    },
+    {
+      "id": "story-gentle-forest",
+      "type": "story",
+      "title": "Oliver and the Whispering Oak",
+      "description": "An illustrated social story exploring sensory processing, quiet spaces, and gentle companionship.",
+      "category": "stories",
+      "categoryName": "Social Stories",
+      "ageRange": "4-8 yrs",
+      "difficulty": "Read-Along",
+      "duration": "7 mins",
+      "status": "published",
+      "orderIndex": 6,
+      "details": {
+        "pages": 6,
+        "theme": "Quiet Spaces"
+      },
+      "createdAt": "2026-10-16T17:58:22.539Z",
+      "updatedAt": "2026-10-16T17:58:22.539Z"
+    },
+    {
+      "id": "res-sensory-diet-guide",
+      "type": "resource",
+      "title": "Caregiver Guide: Crafting a Home Sensory Diet",
+      "description": "Evidence-informed strategies for regulating sensory needs using calm corners and proprioceptive activities.",
+      "category": "resources",
+      "categoryName": "Caregiver Tools",
+      "ageRange": "Caregivers",
+      "difficulty": "Comprehensive",
+      "duration": "12 mins read",
+      "status": "published",
+      "orderIndex": 7,
+      "details": {
+        "author": "Little Steps Clinical OT Team",
+        "tags": [
+          "Sensory Regulation",
+          "Home Routines"
+        ]
+      },
+      "createdAt": "2026-10-16T17:58:22.539Z",
+      "updatedAt": "2026-10-16T17:58:22.539Z"
+    }
+  ],
+  "auditLogs": [
+    {
+      "id": "9c54e2eb-70e2-4be9-9f23-54536c378693",
+      "actorId": "c7099e92-cb46-4438-af4f-eef5c191ce55",
+      "actorEmail": "testuser@example.com",
+      "eventType": "register",
+      "targetType": "user",
+      "targetId": "c7099e92-cb46-4438-af4f-eef5c191ce55",
+      "details": {
+        "name": "Leo Learner"
+      },
+      "ipAddress": "127.0.0.1",
+      "userAgent": "curl/7.88.1",
+      "createdAt": "2026-10-16T17:58:43.353Z"
+    },
+    {
+      "id": "d32a04a9-5b10-42a9-8fb5-9c2c330675b0",
+      "actorId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "actorEmail": "admin@littlesteps.org",
+      "eventType": "login_success",
+      "targetType": "user",
+      "targetId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "details": {},
+      "ipAddress": "127.0.0.1",
+      "userAgent": "curl/7.88.1",
+      "createdAt": "2026-10-16T17:58:34.212Z"
+    },
+    {
+      "id": "a9db7a43-4a85-4cd1-8c31-6a77332dfc4e",
+      "actorId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "actorEmail": "admin@littlesteps.org",
+      "eventType": "admin_bootstrap",
+      "targetType": "user",
+      "targetId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "details": {
+        "message": "Initial Administrator account provisioned"
+      },
+      "createdAt": "2026-10-16T17:58:22.539Z"
+    }
+  ],
+  "settings": {
+    "appName": "Eshal",
+    "brandTagline": "Autism Learning Platform",
+    "allowPublicRegistration": true,
+    "maintenanceMode": false,
+    "sessionTimeoutHours": 168,
+    "requireEmailVerification": false,
+    "maxDailyGoalMinutes": 120,
+    "updatedAt": "2026-10-16T17:58:22.425Z"
+  },
+  "interactions": []
+}
