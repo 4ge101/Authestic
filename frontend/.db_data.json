@@ -1,0 +1,210 @@
+{
+  "users": [
+    {
+      "id": "e9077721-3b76-4fe4-a4f3-42f882e8c3d7",
+      "email": "admin@eshal.org",
+      "passwordHash": "$2a$10$rpTeZ8DRYzz3fF62i1qH4OYDjX2gYpHXaoY7WaS40f5GqYH0L2CVm",
+      "name": "Eshal Admin",
+      "role": "admin",
+      "status": "active",
+      "emailVerified": true,
+      "avatar": "boy",
+      "lastLoginAt": null,
+      "createdAt": "2026-10-19T16:52:58.584Z",
+      "updatedAt": "2026-10-19T16:52:58.584Z"
+    }
+  ],
+  "sessions": [],
+  "verificationTokens": [],
+  "resetTokens": [],
+  "preferences": [
+    {
+      "userId": "e9077721-3b76-4fe4-a4f3-42f882e8c3d7",
+      "soundEnabled": true,
+      "reducedMotion": false,
+      "highContrast": false,
+      "theme": "sage",
+      "dailyGoalMinutes": 30,
+      "updatedAt": "2026-10-19T16:52:58.584Z"
+    }
+  ],
+  "goals": [],
+  "progress": [],
+  "content": [
+    {
+      "id": "act-feelings-faces",
+      "type": "activity",
+      "title": "Matching Friendly Faces",
+      "description": "Look at the gentle animal expressions and connect each emotion to the corresponding card.",
+      "category": "social",
+      "categoryName": "Social Understanding",
+      "ageRange": "4-7 yrs",
+      "difficulty": "Gentle",
+      "duration": "6 mins",
+      "status": "published",
+      "orderIndex": 1,
+      "details": {
+        "steps": 3,
+        "sensoryTags": [
+          "Calm Visuals",
+          "Audio Feedback"
+        ]
+      },
+      "createdAt": "2026-10-19T16:52:58.585Z",
+      "updatedAt": "2026-10-19T16:52:58.585Z"
+    },
+    {
+      "id": "act-breathing-bubble",
+      "type": "sensory",
+      "title": "Gentle Breathing Bubble",
+      "description": "A rhythmic, soft expanding sphere to assist with calm breathing, pacing, and focus regulation.",
+      "category": "sensory",
+      "categoryName": "Sensory Comfort",
+      "ageRange": "All Ages",
+      "difficulty": "Calm Pace",
+      "duration": "5 mins",
+      "status": "published",
+      "orderIndex": 2,
+      "details": {
+        "sensoryTags": [
+          "Gentle Breath",
+          "Audio Chimes",
+          "Visual Rhythm"
+        ]
+      },
+      "createdAt": "2026-10-19T16:52:58.585Z",
+      "updatedAt": "2026-10-19T16:52:58.585Z"
+    },
+    {
+      "id": "act-routine-morning",
+      "type": "life_skill",
+      "title": "Morning Routine Builder",
+      "description": "Step-by-step visual sequencing for waking up, brushing teeth, and getting dressed peacefully.",
+      "category": "routines",
+      "categoryName": "Daily Routines",
+      "ageRange": "3-6 yrs",
+      "difficulty": "Step-by-Step",
+      "duration": "8 mins",
+      "status": "published",
+      "orderIndex": 3,
+      "details": {
+        "sensoryTags": [
+          "Predictable",
+          "Low Audio",
+          "Checklist"
+        ]
+      },
+      "createdAt": "2026-10-19T16:52:58.585Z",
+      "updatedAt": "2026-10-19T16:52:58.585Z"
+    },
+    {
+      "id": "act-forest-puzzles",
+      "type": "activity",
+      "title": "Woodland Shape Matching",
+      "description": "Sort friendly pinecones, acorns, and river stones into their gentle shadow slots.",
+      "category": "focus",
+      "categoryName": "Visual Focus",
+      "ageRange": "4-8 yrs",
+      "difficulty": "Moderate",
+      "duration": "10 mins",
+      "status": "published",
+      "orderIndex": 4,
+      "details": {
+        "sensoryTags": [
+          "Pattern Recognition",
+          "Nature Motifs"
+        ]
+      },
+      "createdAt": "2026-10-19T16:52:58.585Z",
+      "updatedAt": "2026-10-19T16:52:58.585Z"
+    },
+    {
+      "id": "act-visual-feelings",
+      "type": "activity",
+      "title": "AAC Communication Tap Board",
+      "description": "High-clarity visual emotion and request symbols with clear speech synthesis for spontaneous communication.",
+      "category": "communication",
+      "categoryName": "AAC Communication",
+      "ageRange": "All Ages",
+      "difficulty": "Gentle",
+      "duration": "Unlimited",
+      "status": "published",
+      "orderIndex": 5,
+      "details": {
+        "sensoryTags": [
+          "AAC Cards",
+          "Speech Support",
+          "Instant Audio"
+        ]
+      },
+      "createdAt": "2026-10-19T16:52:58.585Z",
+      "updatedAt": "2026-10-19T16:52:58.585Z"
+    },
+    {
+      "id": "story-gentle-forest",
+      "type": "story",
+      "title": "Oliver and the Whispering Oak",
+      "description": "An illustrated social story exploring sensory processing, quiet spaces, and gentle companionship.",
+      "category": "stories",
+      "categoryName": "Social Stories",
+      "ageRange": "4-8 yrs",
+      "difficulty": "Read-Along",
+      "duration": "7 mins",
+      "status": "published",
+      "orderIndex": 6,
+      "details": {
+        "pages": 6,
+        "theme": "Quiet Spaces"
+      },
+      "createdAt": "2026-10-19T16:52:58.585Z",
+      "updatedAt": "2026-10-19T16:52:58.585Z"
+    },
+    {
+      "id": "res-sensory-diet-guide",
+      "type": "resource",
+      "title": "Caregiver Guide: Crafting a Home Sensory Diet",
+      "description": "Evidence-informed strategies for regulating sensory needs using calm corners and proprioceptive activities.",
+      "category": "resources",
+      "categoryName": "Caregiver Tools",
+      "ageRange": "Caregivers",
+      "difficulty": "Comprehensive",
+      "duration": "12 mins read",
+      "status": "published",
+      "orderIndex": 7,
+      "details": {
+        "author": "Eshal Clinical OT Team",
+        "tags": [
+          "Sensory Regulation",
+          "Home Routines"
+        ]
+      },
+      "createdAt": "2026-10-19T16:52:58.585Z",
+      "updatedAt": "2026-10-19T16:52:58.585Z"
+    }
+  ],
+  "auditLogs": [
+    {
+      "id": "de650fd3-918d-40be-ade5-19f886407979",
+      "actorId": "e9077721-3b76-4fe4-a4f3-42f882e8c3d7",
+      "actorEmail": "admin@eshal.org",
+      "eventType": "admin_bootstrap",
+      "targetType": "user",
+      "targetId": "e9077721-3b76-4fe4-a4f3-42f882e8c3d7",
+      "details": {
+        "message": "Initial Eshal Administrator account provisioned"
+      },
+      "createdAt": "2026-10-19T16:52:58.585Z"
+    }
+  ],
+  "interactions": [],
+  "settings": {
+    "appName": "Eshal",
+    "brandTagline": "Autism Learning Platform",
+    "allowPublicRegistration": true,
+    "maintenanceMode": false,
+    "sessionTimeoutHours": 168,
+    "requireEmailVerification": false,
+    "maxDailyGoalMinutes": 120,
+    "updatedAt": "2026-10-19T16:52:58.474Z"
+  }
+}

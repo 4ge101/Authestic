@@ -8,9 +8,13 @@ import express, { Request, Response, NextFunction } from 'express';
 import http from 'http';
 import cookieParser from 'cookie-parser';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import bcrypt from 'bcryptjs';
 import { createServer as createViteServer } from 'vite';
 import { store, UserRecord } from './src/server/store.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // In AI Studio, ensure HMR is disabled to avoid websocket transport errors in iframe
 if (process.env.DISABLE_HMR === undefined) {
@@ -45,8 +49,23 @@ const getClientIp = (req: Request) => {
 };
 
 // Session & User Context Middleware
+const setSessionCookie = (req: Request, res: Response, sessionId: string) => {
+  const isHttps = req.secure || req.headers['x-forwarded-proto'] === 'https';
+  res.cookie(SESSION_COOKIE_NAME, sessionId, {
+    httpOnly: true,
+    secure: isHttps,
+    sameSite: isHttps ? 'none' : 'lax',
+    path: '/',
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
+};
+
 app.use((req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  const sessionId = req.cookies[SESSION_COOKIE_NAME];
+  const authHeader = req.headers.authorization;
+  const bearerToken = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : null;
+  const headerSession = (req.headers['x-session-id'] as string) || (req.headers['x-auth-token'] as string);
+  const sessionId = req.cookies[SESSION_COOKIE_NAME] || bearerToken || headerSession;
+
   if (sessionId) {
     const session = store.findSession(sessionId);
     if (session) {
@@ -131,13 +150,7 @@ app.post('/api/auth/register', (req, res) => {
 
     // Create session
     const session = store.createSession(newUser.id, getClientIp(req), req.headers['user-agent']);
-    res.cookie(SESSION_COOKIE_NAME, session.id, {
-      httpOnly: true,
-      secure: IS_PROD,
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    setSessionCookie(req, res, session.id);
 
     const verifyToken = store.createVerificationToken(newUser.id);
 
@@ -156,6 +169,7 @@ app.post('/api/auth/register', (req, res) => {
 
     res.status(201).json({
       message: 'Account created successfully.',
+      sessionId: session.id,
       user: {
         id: newUser.id,
         email: newUser.email,
@@ -227,13 +241,7 @@ app.post('/api/auth/login', (req, res) => {
 
     // Create session
     const session = store.createSession(user.id, getClientIp(req), req.headers['user-agent']);
-    res.cookie(SESSION_COOKIE_NAME, session.id, {
-      httpOnly: true,
-      secure: IS_PROD,
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    setSessionCookie(req, res, session.id);
 
     store.updateUser(user.id, { lastLoginAt: new Date().toISOString() });
 
@@ -252,6 +260,7 @@ app.post('/api/auth/login', (req, res) => {
 
     res.json({
       message: 'Logged in successfully.',
+      sessionId: session.id,
       user: {
         id: user.id,
         email: user.email,
@@ -810,6 +819,7 @@ async function startServer() {
   if (!IS_PROD) {
     const isHmrDisabled = process.env.DISABLE_HMR !== 'false';
     const vite = await createViteServer({
+      root: __dirname,
       server: {
         middlewareMode: true,
         hmr: { server: httpServer },
@@ -819,7 +829,7 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = path.resolve(process.cwd(), 'dist');
+    const distPath = path.resolve(__dirname, 'dist');
     app.use(express.static(distPath));
     app.get('*', (req, res) => {
       res.sendFile(path.resolve(distPath, 'index.html'));
