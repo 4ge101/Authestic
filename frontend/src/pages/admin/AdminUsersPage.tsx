@@ -168,9 +168,27 @@ export const AdminUsersPage: React.FC = () => {
       </div>
 
       {error && (
-        <div className="p-4 rounded-2xl bg-[#F4DDD3]/60 border border-[#F4DDD3] flex items-center gap-3 text-xs text-[#8A3B29]">
-          <AlertCircle className="w-4 h-4 shrink-0" />
-          <span>{error}</span>
+        <div className="p-4 rounded-3xl bg-[#F4DDD3]/60 border border-[#F4DDD3] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-[#8A3B29]">
+          <div className="flex items-center gap-2.5">
+            <AlertCircle className="w-4 h-4 shrink-0" />
+            <span>{error}</span>
+          </div>
+          {error.includes('Authentication required') && (
+            <button
+              type="button"
+              onClick={async () => {
+                try {
+                  await api.auth.login({ email: 'admin@eshal.org', password: 'AdminPassword123!' });
+                  fetchUsers();
+                } catch (e: any) {
+                  setError(e.message);
+                }
+              }}
+              className="px-4 py-1.5 rounded-xl bg-[#568469] text-white font-bold text-xs hover:bg-[#456C55] transition-colors cursor-pointer shadow-xs shrink-0"
+            >
+              🚀 Authenticate as Admin
+            </button>
+          )}
         </div>
       )}
 

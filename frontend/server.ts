@@ -1,5 +1,5 @@
 /**
- * Little Steps Full-Stack Server
+ * Eshal Full-Stack Server
  * Integrates Express API + Vite middlewares with real authentication,
  * sessions, audit logging, RBAC, content management, and security controls.
  */
@@ -90,7 +90,7 @@ app.get('/health', (req, res) => {
   res.json({
     status: 'healthy',
     timestamp: new Date().toISOString(),
-    service: 'Little Steps API',
+    service: 'Eshal API',
   });
 });
 
@@ -428,6 +428,17 @@ app.get('/api/content/item/:id', (req, res) => {
   res.json(item);
 });
 
+// Event / Content Interaction Tracking
+app.post('/api/analytics/track', (req: AuthenticatedRequest, res) => {
+  const { contentId, contentType, interactionType } = req.body;
+  if (!contentId || !contentType) {
+    return res.status(400).json({ error: 'Missing contentId or contentType.' });
+  }
+  const userId = req.user ? req.user.id : null;
+  const interaction = store.recordInteraction(userId, contentId, contentType, interactionType || 'view');
+  res.json({ success: true, id: interaction.id });
+});
+
 // --- User Goals & Progress ---
 
 app.get('/api/progress/goals', requireAuth, (req: AuthenticatedRequest, res) => {
@@ -457,6 +468,13 @@ app.post('/api/progress/complete/:activityId', requireAuth, (req: AuthenticatedR
 app.get('/api/admin/overview', requireAdmin, (req, res) => {
   const stats = store.getOverviewStats();
   res.json(stats);
+});
+
+// Admin Analytics
+app.get('/api/admin/analytics', requireAdmin, (req, res) => {
+  const range = (req.query.range as string) || '30d';
+  const analytics = store.getAnalyticsData(range);
+  res.json(analytics);
 });
 
 // Admin Users List
@@ -794,7 +812,7 @@ async function startServer() {
     const vite = await createViteServer({
       server: {
         middlewareMode: true,
-        hmr: isHmrDisabled ? false : { server: httpServer },
+        hmr: { server: httpServer },
         watch: isHmrDisabled ? null : {},
       },
       appType: 'spa',
@@ -809,8 +827,8 @@ async function startServer() {
   }
 
   httpServer.listen(PORT, '0.0.0.0', () => {
-    console.log(`✨ Little Steps service active on http://0.0.0.0:${PORT}`);
-    console.log(`🔐 Admin credentials: admin@littlesteps.org / AdminPassword123!`);
+    console.log(`✨ Eshal service active on http://0.0.0.0:${PORT}`);
+    console.log(`🔐 Admin credentials: admin@eshal.org / AdminPassword123!`);
   });
 }
 

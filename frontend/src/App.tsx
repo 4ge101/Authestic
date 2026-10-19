@@ -3,14 +3,35 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
 import { MobileNav } from './components/MobileNav';
 import { SearchResultsOverlay } from './components/SearchResultsOverlay';
 
-// Dedicated Pages
+// Auth & Protection
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import { api } from './services/api';
+
+// Auth Pages
+import { LoginPage } from './pages/auth/LoginPage';
+import { RegisterPage } from './pages/auth/RegisterPage';
+import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage';
+import { ResetPasswordPage } from './pages/auth/ResetPasswordPage';
+import { VerifyEmailPage } from './pages/auth/VerifyEmailPage';
+
+// Admin Pages
+import { AdminLayout } from './pages/admin/AdminLayout';
+import { AdminOverviewPage } from './pages/admin/AdminOverviewPage';
+import { AdminAnalyticsPage } from './pages/admin/AdminAnalyticsPage';
+import { AdminUsersPage } from './pages/admin/AdminUsersPage';
+import { AdminContentPage } from './pages/admin/AdminContentPage';
+import { AdminAuditPage } from './pages/admin/AdminAuditPage';
+import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
+
+// Dedicated User Pages
 import { HomePage } from './pages/HomePage';
 import { LearnPage } from './pages/LearnPage';
 import { PlayPage } from './pages/PlayPage';
@@ -43,8 +64,9 @@ import {
 import { Activity, DailyGoal, LearningProgress, ResourceItem, UserProfile } from './types';
 import { playGentleChime, playSoftSuccess } from './utils/audio';
 
-function AppContent() {
+function MainAppShell() {
   const navigate = useNavigate();
+  const { user: authUser, updatePreferences: savePreferences, updateName: saveName } = useAuth();
 
   // Application State
   const [user, setUser] = useState<UserProfile>(INITIAL_USER_PROFILE);
@@ -59,6 +81,58 @@ function AppContent() {
   const [isSensoryModalOpen, setIsSensoryModalOpen] = useState(false);
   const [isCaregiverModalOpen, setIsCaregiverModalOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Sync state from Authenticated User
+  useEffect(() => {
+    if (authUser) {
+      setUser((prev) => ({
+        ...prev,
+        id: authUser.id,
+        name: authUser.name,
+        role: authUser.role,
+        preferences: {
+          ...prev.preferences,
+          soundEnabled: authUser.preferences.soundEnabled ?? true,
+          reducedMotion: authUser.preferences.reducedMotion ?? false,
+          highContrast: authUser.preferences.highContrast ?? false,
+        },
+      }));
+    }
+  }, [authUser]);
+
+  // Load Database Goals and Activities
+  useEffect(() => {
+    if (authUser) {
+      api.progress.getGoals()
+        .then((dbGoals) => {
+          if (dbGoals && dbGoals.length > 0) {
+            setGoals(dbGoals as any);
+          }
+        })
+        .catch(() => {});
+
+      api.content.getActivities()
+        .then((dbActs) => {
+          if (dbActs && dbActs.length > 0) {
+            setActivities((prev) => {
+              const map = new Map(prev.map((a) => [a.id, a]));
+              for (const item of dbActs) {
+                if (map.has(item.id)) {
+                  const existing = map.get(item.id)!;
+                  map.set(item.id, {
+                    ...existing,
+                    title: item.title,
+                    description: item.description,
+                  });
+                }
+              }
+              return Array.from(map.values());
+            });
+          }
+        })
+        .catch(() => {});
+    }
+  }, [authUser]);
 
   // Derived Progress Calculation
   const progress: LearningProgress = useMemo(() => {
@@ -77,7 +151,7 @@ function AppContent() {
     };
   }, [goals, activities]);
 
-  // Goal Toggle
+  // Goal Toggle with real backend persistence
   const handleToggleGoal = (goalId: string) => {
     setGoals((prev) =>
       prev.map((g) => {
@@ -88,6 +162,8 @@ function AppContent() {
           } else {
             playGentleChime(user.preferences.soundEnabled, 350);
           }
+          // Persist to backend database
+          api.progress.toggleGoal(goalId, nextState).catch(() => {});
           return { ...g, completed: nextState };
         }
         return g;
@@ -95,7 +171,7 @@ function AppContent() {
     );
   };
 
-  // Preference Updates
+  // Preference Updates with backend persistence
   const handleUpdatePreferences = (updated: Partial<UserProfile['preferences']>) => {
     setUser((prev) => ({
       ...prev,
@@ -104,10 +180,12 @@ function AppContent() {
         ...updated,
       },
     }));
+    savePreferences(updated).catch(() => {});
   };
 
   const handleUpdateUserName = (name: string) => {
     setUser((prev) => ({ ...prev, name }));
+    saveName(name).catch(() => {});
   };
 
   const handleToggleSound = () => {
@@ -144,6 +222,8 @@ function AppContent() {
     setActivities((prev) =>
       prev.map((act) => {
         if (act.id === activityId) {
+          // Persist completion to backend
+          api.progress.completeActivity(activityId, act.totalSteps, 100).catch(() => {});
           return {
             ...act,
             completed: true,
@@ -157,9 +237,11 @@ function AppContent() {
   };
 
   return (
-    <div className={`min-h-screen bg-[#F8F6F0] text-[#263831] flex flex-col md:flex-row relative ${
-      user.preferences.highContrast ? 'contrast-105' : ''
-    }`}>
+    <div
+      className={`min-h-screen bg-[#F8F6F0] text-[#263831] flex flex-col md:flex-row relative ${
+        user.preferences.highContrast ? 'contrast-105' : ''
+      }`}
+    >
       {/* Desktop Fixed Left Sidebar */}
       <Sidebar
         onCloseMobileDrawer={() => setMobileMenuOpen(false)}
@@ -186,7 +268,7 @@ function AppContent() {
         </div>
       )}
 
-      {/* Main Content Area - with md:ml-[205px] so it scrolls smoothly alongside fixed sidebar */}
+      {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 pb-20 md:pb-0 relative md:ml-[205px]">
         {/* Floating Top Right Area with Search & Profile */}
         <div className="relative">
@@ -220,7 +302,7 @@ function AppContent() {
           )}
         </div>
 
-        {/* Dynamic Route Pages */}
+        {/* Dynamic User Routes */}
         <Routes>
           <Route
             path="/"
@@ -303,7 +385,7 @@ function AppContent() {
                 <button
                   type="button"
                   onClick={() => navigate('/')}
-                  className="px-6 py-2.5 rounded-full bg-[#568469] text-white font-bold text-xs"
+                  className="px-6 py-2.5 rounded-full bg-[#568469] text-white font-bold text-xs cursor-pointer"
                 >
                   Return to Home
                 </button>
@@ -312,7 +394,7 @@ function AppContent() {
           />
         </Routes>
 
-        {/* Redesigned Little Steps Organic Footer */}
+        {/* Footer */}
         <Footer
           soundEnabled={user.preferences.soundEnabled}
           onToggleSound={handleToggleSound}
@@ -356,8 +438,44 @@ function AppContent() {
 export default function App() {
   return (
     <BrowserRouter>
-      <ScrollToTop />
-      <AppContent />
+      <AuthProvider>
+        <ScrollToTop />
+        <Routes>
+          {/* Public Authentication Pages */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
+          <Route path="/verify-email" element={<VerifyEmailPage />} />
+
+          {/* Protected Administrator Dashboard */}
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute requireAdmin>
+                <AdminLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<AdminOverviewPage />} />
+            <Route path="analytics" element={<AdminAnalyticsPage />} />
+            <Route path="users" element={<AdminUsersPage />} />
+            <Route path="content" element={<AdminContentPage />} />
+            <Route path="audit" element={<AdminAuditPage />} />
+            <Route path="settings" element={<AdminSettingsPage />} />
+          </Route>
+
+          {/* Protected Main Application */}
+          <Route
+            path="/*"
+            element={
+              <ProtectedRoute>
+                <MainAppShell />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

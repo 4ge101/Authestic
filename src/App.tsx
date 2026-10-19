@@ -5,42 +5,43 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
-import { Sidebar } from './src/components/Sidebar';
-import { Header } from './src/components/Header';
+import { Sidebar } from './components/Sidebar';
+import { Header } from './components/Header';
 import { MobileNav } from './components/MobileNav';
 import { SearchResultsOverlay } from './components/SearchResultsOverlay';
 
 // Auth & Protection
-import { AuthProvider, useAuth } from './src/context/AuthContext';
-import { ProtectedRoute } from './src/components/ProtectedRoute';
-import { api } from './src/services/api';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import { api } from './services/api';
 
 // Auth Pages
-import { LoginPage } from './src/pages/auth/LoginPage';
-import { RegisterPage } from './src/pages/auth/RegisterPage';
-import { ForgotPasswordPage } from './src/pages/auth/ForgotPasswordPage';
-import { ResetPasswordPage } from './src/pages/auth/ResetPasswordPage';
-import { VerifyEmailPage } from './src/pages/auth/VerifyEmailPage';
+import { LoginPage } from './pages/auth/LoginPage';
+import { RegisterPage } from './pages/auth/RegisterPage';
+import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage';
+import { ResetPasswordPage } from './pages/auth/ResetPasswordPage';
+import { VerifyEmailPage } from './pages/auth/VerifyEmailPage';
 
 // Admin Pages
-import { AdminLayout } from './src/pages/admin/AdminLayout';
-import { AdminOverviewPage } from './src/pages/admin/AdminOverviewPage';
-import { AdminUsersPage } from './src/pages/admin/AdminUsersPage';
-import { AdminContentPage } from './src/pages/admin/AdminContentPage';
-import { AdminAuditPage } from './src/pages/admin/AdminAuditPage';
-import { AdminSettingsPage } from './src/pages/admin/AdminSettingsPage';
+import { AdminLayout } from './pages/admin/AdminLayout';
+import { AdminOverviewPage } from './pages/admin/AdminOverviewPage';
+import { AdminAnalyticsPage } from './pages/admin/AdminAnalyticsPage';
+import { AdminUsersPage } from './pages/admin/AdminUsersPage';
+import { AdminContentPage } from './pages/admin/AdminContentPage';
+import { AdminAuditPage } from './pages/admin/AdminAuditPage';
+import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
 
 // Dedicated User Pages
 import { HomePage } from './pages/HomePage';
-import { LearnPage } from './src/pages/LearnPage';
-import { PlayPage } from './src/pages/PlayPage';
+import { LearnPage } from './pages/LearnPage';
+import { PlayPage } from './pages/PlayPage';
 import { StoriesPage } from './pages/StoriesPage';
 import { StoryReaderPage } from './pages/StoryReaderPage';
 import { ResourcesPage } from './pages/ResourcesPage';
-import { ResourceDetailPage } from './src/pages/ResourceDetailPage';
+import { ResourceDetailPage } from './pages/ResourceDetailPage';
 import { CommunicationPage } from './pages/CommunicationPage';
 import { LifeSkillsPage } from './pages/LifeSkillsPage';
-import { SensoryPage } from './src/pages/SensoryPage';
+import { SensoryPage } from './pages/SensoryPage';
 import { ProgressPage } from './pages/ProgressPage';
 import { SettingsPage } from './pages/SettingsPage';
 
@@ -51,7 +52,7 @@ import { CaregiverModal } from './components/CaregiverModal';
 
 // Motion & Global Components
 import { ScrollToTop } from './components/ScrollToTop';
-import { Footer } from './src/components/Footer';
+import { Footer } from './components/Footer';
 
 import {
   INITIAL_USER_PROFILE,
@@ -457,6 +458,7 @@ export default function App() {
             }
           >
             <Route index element={<AdminOverviewPage />} />
+            <Route path="analytics" element={<AdminAnalyticsPage />} />
             <Route path="users" element={<AdminUsersPage />} />
             <Route path="content" element={<AdminContentPage />} />
             <Route path="audit" element={<AdminAuditPage />} />

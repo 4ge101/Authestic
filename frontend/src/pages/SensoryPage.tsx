@@ -178,7 +178,7 @@ export const SensoryPage: React.FC = () => {
                 Sensory Preferences Policy
               </h3>
               <p className="text-xs text-[#728078] leading-relaxed font-medium">
-                Little Steps never autoplays sound and avoids rapid animations or flashing visuals. All sound is off by default, and contrast or motion can be adapted instantly.
+                Eshal never autoplays sound and avoids rapid animations or flashing visuals. All sound is off by default, and contrast or motion can be adapted instantly.
               </p>
             </BentoCard>
           </div>

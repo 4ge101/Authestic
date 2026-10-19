@@ -9,9 +9,9 @@
       "status": "active",
       "emailVerified": true,
       "avatar": "boy",
-      "lastLoginAt": "2026-10-16T17:58:34.212Z",
+      "lastLoginAt": "2026-10-18T11:02:28.724Z",
       "createdAt": "2026-10-16T17:58:22.538Z",
-      "updatedAt": "2026-10-16T17:58:34.212Z"
+      "updatedAt": "2026-10-18T11:02:28.724Z"
     },
     {
       "email": "testuser@example.com",
@@ -25,6 +25,19 @@
       "id": "c7099e92-cb46-4438-af4f-eef5c191ce55",
       "createdAt": "2026-10-16T17:58:43.351Z",
       "updatedAt": "2026-10-16T17:58:43.351Z"
+    },
+    {
+      "email": "vbghbgbh@gmail.com",
+      "passwordHash": "$2a$10$zla03MMNXpo6nKNf.FE/Uu9AheO8bUZ0gSA.x9tWYfdiuQuD0.M86",
+      "name": "cvfegh",
+      "role": "user",
+      "status": "active",
+      "emailVerified": true,
+      "avatar": "corgi",
+      "lastLoginAt": null,
+      "id": "efc1f4bf-cd3d-4f9e-a5a7-11936f843069",
+      "createdAt": "2026-10-18T08:51:41.011Z",
+      "updatedAt": "2026-10-18T08:51:42.943Z"
     }
   ],
   "sessions": [
@@ -43,6 +56,70 @@
       "userAgent": "curl/7.88.1",
       "expiresAt": "2026-10-23T17:58:43.352Z",
       "createdAt": "2026-10-16T17:58:43.352Z"
+    },
+    {
+      "id": "c3074f6da43cce295741ba05ed132a19a45ea54a1a6c230817a60c1e87d20f82",
+      "userId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "ipAddress": "2400:74e0:13:52b0:e33c:3d95:1789:64d4, 169.254.169.126",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:157.0) Gecko/20100101 Firefox/157.0",
+      "expiresAt": "2026-10-24T17:30:49.199Z",
+      "createdAt": "2026-10-17T17:30:49.199Z"
+    },
+    {
+      "id": "2902448099828cd9d0c37f2856cf0fa588104dc4467c0194b73952d74ee4e6d5",
+      "userId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "curl/7.88.1",
+      "expiresAt": "2026-10-24T17:46:04.796Z",
+      "createdAt": "2026-10-17T17:46:04.796Z"
+    },
+    {
+      "id": "2fac5091b6dabbf2baa26613ba8a69574da4c4feae47667d74ea85d930f4028d",
+      "userId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "ipAddress": "2400:74e0:13:52b0:e33c:3d95:1789:64d4, 169.254.169.126",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:158.0) Gecko/20100101 Firefox/158.0",
+      "expiresAt": "2026-10-25T08:48:51.085Z",
+      "createdAt": "2026-10-18T08:48:51.085Z"
+    },
+    {
+      "id": "3f75a03e4b8281baf8242cf4b9e596fc4dffbbfa24128cb94c60acb9ee1111b0",
+      "userId": "efc1f4bf-cd3d-4f9e-a5a7-11936f843069",
+      "ipAddress": "2400:74e0:13:52b0:e33c:3d95:1789:64d4, 169.254.169.126",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:158.0) Gecko/20100101 Firefox/158.0",
+      "expiresAt": "2026-10-25T08:51:41.012Z",
+      "createdAt": "2026-10-18T08:51:41.012Z"
+    },
+    {
+      "id": "01da6e95ce45646d7120ba2caf9fe51beba98fd0c76db13d480a2e6d7e196238",
+      "userId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "ipAddress": "2400:74e0:13:52b0:e33c:3d95:1789:64d4, 169.254.169.126",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:158.0) Gecko/20100101 Firefox/158.0",
+      "expiresAt": "2026-10-25T08:56:07.383Z",
+      "createdAt": "2026-10-18T08:56:07.383Z"
+    },
+    {
+      "id": "976b777bb7f2fdf74623ac0f7b5827d6245acefe33112f8c3f6281df62f1cb1b",
+      "userId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "curl/7.88.1",
+      "expiresAt": "2026-10-25T09:00:08.042Z",
+      "createdAt": "2026-10-18T09:00:08.042Z"
+    },
+    {
+      "id": "536de146a4ce2dcfdaa894098c308d4feee6c7fa791cf76181761539425d001c",
+      "userId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "ipAddress": "2400:74e0:13:52b0:e33c:3d95:1789:64d4, 169.254.169.126",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:158.0) Gecko/20100101 Firefox/158.0",
+      "expiresAt": "2026-10-25T09:48:32.887Z",
+      "createdAt": "2026-10-18T09:48:32.887Z"
+    },
+    {
+      "id": "c94ca5ba5980c75541b6f39628dfa43b1b31c4a30700c5b24e2babab8c35c013",
+      "userId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "curl/7.88.1",
+      "expiresAt": "2026-10-25T11:02:28.722Z",
+      "createdAt": "2026-10-18T11:02:28.722Z"
     }
   ],
   "verificationTokens": [
@@ -52,6 +129,13 @@
       "expiresAt": "2026-10-17T17:58:43.353Z",
       "usedAt": null,
       "createdAt": "2026-10-16T17:58:43.353Z"
+    },
+    {
+      "token": "0231d2093a57ba31ff0ec691861939b22c96db3591c465f0",
+      "userId": "efc1f4bf-cd3d-4f9e-a5a7-11936f843069",
+      "expiresAt": "2026-10-19T08:51:41.012Z",
+      "usedAt": "2026-10-18T08:51:42.943Z",
+      "createdAt": "2026-10-18T08:51:41.012Z"
     }
   ],
   "resetTokens": [],
@@ -73,6 +157,15 @@
       "theme": "sage",
       "dailyGoalMinutes": 20,
       "updatedAt": "2026-10-16T17:58:43.351Z"
+    },
+    {
+      "userId": "efc1f4bf-cd3d-4f9e-a5a7-11936f843069",
+      "soundEnabled": true,
+      "reducedMotion": false,
+      "highContrast": false,
+      "theme": "sage",
+      "dailyGoalMinutes": 20,
+      "updatedAt": "2026-10-18T08:51:41.011Z"
     }
   ],
   "goals": [
@@ -108,6 +201,39 @@
       "completed": false,
       "date": "2026-10-16",
       "createdAt": "2026-10-16T17:58:43.352Z"
+    },
+    {
+      "id": "goal-1-efc1f4bf-cd3d-4f9e-a5a7-11936f843069",
+      "userId": "efc1f4bf-cd3d-4f9e-a5a7-11936f843069",
+      "title": "Morning Emotion Check-In",
+      "category": "communication",
+      "targetCount": 1,
+      "completedCount": 0,
+      "completed": false,
+      "date": "2026-10-18",
+      "createdAt": "2026-10-18T08:51:41.011Z"
+    },
+    {
+      "id": "goal-2-efc1f4bf-cd3d-4f9e-a5a7-11936f843069",
+      "userId": "efc1f4bf-cd3d-4f9e-a5a7-11936f843069",
+      "title": "Woodland Shape Puzzle",
+      "category": "focus",
+      "targetCount": 1,
+      "completedCount": 0,
+      "completed": false,
+      "date": "2026-10-18",
+      "createdAt": "2026-10-18T08:51:41.011Z"
+    },
+    {
+      "id": "goal-3-efc1f4bf-cd3d-4f9e-a5a7-11936f843069",
+      "userId": "efc1f4bf-cd3d-4f9e-a5a7-11936f843069",
+      "title": "Gentle Sensory Breathing",
+      "category": "sensory",
+      "targetCount": 1,
+      "completedCount": 0,
+      "completed": false,
+      "date": "2026-10-18",
+      "createdAt": "2026-10-18T08:51:41.011Z"
     }
   ],
   "progress": [],
@@ -265,6 +391,104 @@
   ],
   "auditLogs": [
     {
+      "id": "417b0893-1d98-4543-a69c-ea0fe7929e44",
+      "actorId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "actorEmail": "admin@eshal.org",
+      "eventType": "login_success",
+      "targetType": "user",
+      "targetId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "details": {},
+      "ipAddress": "127.0.0.1",
+      "userAgent": "curl/7.88.1",
+      "createdAt": "2026-10-18T11:02:28.724Z"
+    },
+    {
+      "id": "3d0cd86c-39c1-47f8-a344-711701b61315",
+      "actorId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "actorEmail": "admin@eshal.org",
+      "eventType": "login_success",
+      "targetType": "user",
+      "targetId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "details": {},
+      "ipAddress": "2400:74e0:13:52b0:e33c:3d95:1789:64d4, 169.254.169.126",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:158.0) Gecko/20100101 Firefox/158.0",
+      "createdAt": "2026-10-18T09:48:32.890Z"
+    },
+    {
+      "id": "af0d282d-e90c-4538-b0f7-90c40a239928",
+      "actorId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "actorEmail": "admin@eshal.org",
+      "eventType": "login_success",
+      "targetType": "user",
+      "targetId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "details": {},
+      "ipAddress": "127.0.0.1",
+      "userAgent": "curl/7.88.1",
+      "createdAt": "2026-10-18T09:00:08.044Z"
+    },
+    {
+      "id": "c374093e-6f39-430b-b720-3067c9658d00",
+      "actorId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "actorEmail": "admin@eshal.org",
+      "eventType": "login_success",
+      "targetType": "user",
+      "targetId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "details": {},
+      "ipAddress": "2400:74e0:13:52b0:e33c:3d95:1789:64d4, 169.254.169.126",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:158.0) Gecko/20100101 Firefox/158.0",
+      "createdAt": "2026-10-18T08:56:07.384Z"
+    },
+    {
+      "id": "902cf71c-6b33-43b3-92b7-8f389f6e3b1a",
+      "actorId": "efc1f4bf-cd3d-4f9e-a5a7-11936f843069",
+      "actorEmail": "vbghbgbh@gmail.com",
+      "eventType": "register",
+      "targetType": "user",
+      "targetId": "efc1f4bf-cd3d-4f9e-a5a7-11936f843069",
+      "details": {
+        "name": "cvfegh"
+      },
+      "ipAddress": "2400:74e0:13:52b0:e33c:3d95:1789:64d4, 169.254.169.126",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:158.0) Gecko/20100101 Firefox/158.0",
+      "createdAt": "2026-10-18T08:51:41.012Z"
+    },
+    {
+      "id": "d2080f3f-4b03-466f-a7b6-81cab8045bc8",
+      "actorId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "actorEmail": "admin@eshal.org",
+      "eventType": "login_success",
+      "targetType": "user",
+      "targetId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "details": {},
+      "ipAddress": "2400:74e0:13:52b0:e33c:3d95:1789:64d4, 169.254.169.126",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:158.0) Gecko/20100101 Firefox/158.0",
+      "createdAt": "2026-10-18T08:48:51.087Z"
+    },
+    {
+      "id": "654e7213-ad41-43ea-a992-e5411b22ca0c",
+      "actorId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "actorEmail": "admin@eshal.org",
+      "eventType": "login_success",
+      "targetType": "user",
+      "targetId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "details": {},
+      "ipAddress": "127.0.0.1",
+      "userAgent": "curl/7.88.1",
+      "createdAt": "2026-10-17T17:46:04.797Z"
+    },
+    {
+      "id": "9daf8420-1672-456f-b1b3-a654b1b8a6c0",
+      "actorId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "actorEmail": "admin@eshal.org",
+      "eventType": "login_success",
+      "targetType": "user",
+      "targetId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "details": {},
+      "ipAddress": "2400:74e0:13:52b0:e33c:3d95:1789:64d4, 169.254.169.126",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:157.0) Gecko/20100101 Firefox/157.0",
+      "createdAt": "2026-10-17T17:30:49.201Z"
+    },
+    {
       "id": "9c54e2eb-70e2-4be9-9f23-54536c378693",
       "actorId": "c7099e92-cb46-4438-af4f-eef5c191ce55",
       "actorEmail": "testuser@example.com",
@@ -313,5 +537,14 @@
     "maxDailyGoalMinutes": 120,
     "updatedAt": "2026-10-16T17:58:22.425Z"
   },
-  "interactions": []
+  "interactions": [
+    {
+      "id": "5d1d61ff-d1ae-407d-8017-e20307ad06a7",
+      "userId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "contentId": "act-garden-story",
+      "contentType": "story",
+      "interactionType": "session_start",
+      "createdAt": "2026-10-17T17:46:13.648Z"
+    }
+  ]
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import {
   Heart,
   ArrowUp,
@@ -121,7 +121,7 @@ export const Footer: React.FC<FooterProps> = ({
                 </div>
                 <div className="flex flex-col">
                   <span className="font-extrabold text-xl tracking-tight text-[#263831]">
-                    Little Steps
+                    Eshal
                   </span>
                   <span className="text-[11px] font-bold text-[#568469] tracking-wider uppercase">
                     Autism Learning Haven
@@ -323,12 +323,16 @@ export const Footer: React.FC<FooterProps> = ({
             <span>for neurodivergent young learners everywhere.</span>
           </div>
 
-          <div className="flex items-center gap-4 text-[11px]">
+          <div className="flex items-center gap-3 sm:gap-4 text-[11px] flex-wrap">
+            <Link to="/admin" className="text-[#568469] font-bold hover:underline">
+              Admin Console
+            </Link>
+            <span>•</span>
             <span>No Trackers</span>
             <span>•</span>
             <span>Non-Overstimulating</span>
             <span>•</span>
-            <span>Little Steps &copy; {new Date().getFullYear()}</span>
+            <span>Eshal &copy; {new Date().getFullYear()}</span>
           </div>
         </div>
       </div>

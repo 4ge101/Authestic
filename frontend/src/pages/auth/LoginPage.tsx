@@ -14,15 +14,21 @@ export const LoginPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   // Safe redirect path (no external URLs)
-  const from = (location.state as any)?.from?.pathname || '/';
+  const from = (location.state as any)?.from?.pathname;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
     try {
-      await login(email, password);
-      navigate(from, { replace: true });
+      const loggedUser = await login(email, password);
+      if (from) {
+        navigate(from, { replace: true });
+      } else if (email === 'admin@eshal.org' || loggedUser?.role === 'admin') {
+        navigate('/admin', { replace: true });
+      } else {
+        navigate('/', { replace: true });
+      }
     } catch (err: any) {
       setError(err.message || 'Failed to sign in. Please check your credentials.');
     } finally {
@@ -130,13 +136,34 @@ export const LoginPage: React.FC = () => {
           <p className="text-[11px] text-[#728078] mb-2 leading-relaxed">
             Use the provisioned credentials to access the Administrator Dashboard and system settings.
           </p>
-          <button
-            type="button"
-            onClick={() => handleFillDemo('admin')}
-            className="text-[11px] font-bold text-[#568469] bg-[#E2EBD9] hover:bg-[#d5e2cb] px-3 py-1 rounded-lg transition-colors cursor-pointer"
-          >
-            Fill Admin Credentials (admin@eshal.org)
-          </button>
+          <div className="flex flex-col sm:flex-row gap-2 mt-2">
+            <button
+              type="button"
+              onClick={() => handleFillDemo('admin')}
+              className="text-[11px] font-bold text-[#568469] bg-[#E2EBD9] hover:bg-[#d5e2cb] px-3 py-2 rounded-xl transition-colors cursor-pointer text-center"
+            >
+              Fill Credentials
+            </button>
+            <button
+              type="button"
+              onClick={async () => {
+                setError(null);
+                setLoading(true);
+                try {
+                  await login('admin@eshal.org', 'AdminPassword123!');
+                  navigate('/admin', { replace: true });
+                } catch (err: any) {
+                  setError(err.message || 'Failed to sign in as admin.');
+                } finally {
+                  setLoading(false);
+                }
+              }}
+              className="text-[11px] font-bold text-white bg-[#568469] hover:bg-[#456C55] px-3.5 py-2 rounded-xl transition-colors cursor-pointer text-center shadow-xs flex items-center justify-center gap-1.5"
+            >
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>Launch Admin Dashboard</span>
+            </button>
+          </div>
         </div>
 
         <div className="mt-8 text-center text-xs text-[#728078]">
