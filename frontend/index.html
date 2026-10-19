@@ -3,83 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script>
-      // Gracefully handle Vite HMR WebSocket transport in iframe/preview container
-      (function() {
-        const NativeWebSocket = window.WebSocket;
-        if (NativeWebSocket) {
-          window.WebSocket = function(url, protocols) {
-            const isViteHmr =
-              protocols === 'vite-hmr' ||
-              (Array.isArray(protocols) && protocols.includes('vite-hmr')) ||
-              (typeof url === 'string' && (url.includes('token=') || url.includes('/@vite')));
-
-            if (isViteHmr) {
-              const target = new EventTarget();
-              const fakeWs = {
-                url,
-                readyState: 1, // OPEN
-                OPEN: 1,
-                CONNECTING: 0,
-                CLOSING: 2,
-                CLOSED: 3,
-                send: function() {},
-                close: function() {},
-                addEventListener: target.addEventListener.bind(target),
-                removeEventListener: target.removeEventListener.bind(target),
-                dispatchEvent: target.dispatchEvent.bind(target),
-                set onopen(fn) { target.addEventListener('open', fn); },
-                set onclose(fn) { target.addEventListener('close', fn); },
-                set onerror(fn) { target.addEventListener('error', fn); },
-                set onmessage(fn) { target.addEventListener('message', fn); },
-              };
-              setTimeout(() => {
-                target.dispatchEvent(new Event('open'));
-              }, 0);
-              return fakeWs;
-            }
-            return new NativeWebSocket(url, protocols);
-          };
-          window.WebSocket.prototype = NativeWebSocket.prototype;
-          window.WebSocket.CONNECTING = NativeWebSocket.CONNECTING;
-          window.WebSocket.OPEN = NativeWebSocket.OPEN;
-          window.WebSocket.CLOSING = NativeWebSocket.CLOSING;
-          window.WebSocket.CLOSED = NativeWebSocket.CLOSED;
-        }
-
-        window.addEventListener('unhandledrejection', function(event) {
-          const reason = event.reason;
-          const msg = typeof reason === 'string' ? reason : reason?.message || '';
-          const stack = reason?.stack || '';
-          if (
-            msg.includes('WebSocket') ||
-            msg.includes('@vite/client') ||
-            msg.includes('createWebSocketModuleRunnerTransport') ||
-            stack.includes('@vite/client') ||
-            stack.includes('createWebSocketModuleRunnerTransport')
-          ) {
-            event.preventDefault();
-            event.stopImmediatePropagation();
-          }
-        });
-
-        window.addEventListener('error', function(event) {
-          if (
-            event.message &&
-            (event.message.includes('WebSocket') ||
-             event.message.includes('@vite/client') ||
-             event.filename?.includes('@vite/client'))
-          ) {
-            event.preventDefault();
-            event.stopImmediatePropagation();
-          }
-        }, true);
-      })();
-    </script>
-    <title>Eshal - Autism Learning Platform</title>
-    <meta name="description" content="Eshal - Accessible, calm, and neurodiversity-affirming learning platform for young children and caregivers." />
-    <meta property="og:title" content="Eshal - Autism Learning Platform" />
-    <meta property="og:description" content="Eshal - Accessible, calm, and neurodiversity-affirming learning platform for young children and caregivers." />
+    <title>Little Steps - Autism Learning Platform</title>
+    <meta name="description" content="Accessible, calm, and neurodiversity-affirming learning home screen for young children and caregivers." />
+    <meta property="og:title" content="Little Steps - Autism Learning Platform" />
+    <meta property="og:description" content="Accessible, calm, and neurodiversity-affirming learning home screen for young children and caregivers." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />

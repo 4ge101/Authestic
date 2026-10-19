@@ -7,7 +7,7 @@ interface AuthContextType {
   error: string | null;
   isAdmin: boolean;
   isSupport: boolean;
-  login: (email: string, password: string) => Promise<ApiUser | undefined>;
+  login: (email: string, password: string) => Promise<void>;
   register: (payload: { email: string; password: string; name: string; avatar?: string }) => Promise<{ devVerificationToken?: string }>;
   logout: () => Promise<void>;
   updatePreferences: (prefs: Partial<ApiUser['preferences']>) => Promise<void>;
@@ -42,7 +42,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setError(null);
     const res = await api.auth.login({ email, password });
     setUser(res.user);
-    return res.user;
   };
 
   const register = async (payload: { email: string; password: string; name: string; avatar?: string }) => {

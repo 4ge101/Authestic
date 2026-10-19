@@ -1,5 +1,5 @@
 /**
- * Eshal Full-Stack Server
+ * Little Steps Full-Stack Server
  * Integrates Express API + Vite middlewares with real authentication,
  * sessions, audit logging, RBAC, content management, and security controls.
  */
@@ -8,13 +8,9 @@ import express, { Request, Response, NextFunction } from 'express';
 import http from 'http';
 import cookieParser from 'cookie-parser';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import bcrypt from 'bcryptjs';
 import { createServer as createViteServer } from 'vite';
 import { store, UserRecord } from './src/server/store.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 // In AI Studio, ensure HMR is disabled to avoid websocket transport errors in iframe
 if (process.env.DISABLE_HMR === undefined) {
@@ -49,23 +45,8 @@ const getClientIp = (req: Request) => {
 };
 
 // Session & User Context Middleware
-const setSessionCookie = (req: Request, res: Response, sessionId: string) => {
-  const isHttps = req.secure || req.headers['x-forwarded-proto'] === 'https';
-  res.cookie(SESSION_COOKIE_NAME, sessionId, {
-    httpOnly: true,
-    secure: isHttps,
-    sameSite: isHttps ? 'none' : 'lax',
-    path: '/',
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-  });
-};
-
 app.use((req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  const authHeader = req.headers.authorization;
-  const bearerToken = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : null;
-  const headerSession = (req.headers['x-session-id'] as string) || (req.headers['x-auth-token'] as string);
-  const sessionId = req.cookies[SESSION_COOKIE_NAME] || bearerToken || headerSession;
-
+  const sessionId = req.cookies[SESSION_COOKIE_NAME];
   if (sessionId) {
     const session = store.findSession(sessionId);
     if (session) {
@@ -109,7 +90,7 @@ app.get('/health', (req, res) => {
   res.json({
     status: 'healthy',
     timestamp: new Date().toISOString(),
-    service: 'Eshal API',
+    service: 'Little Steps API',
   });
 });
 
@@ -150,7 +131,13 @@ app.post('/api/auth/register', (req, res) => {
 
     // Create session
     const session = store.createSession(newUser.id, getClientIp(req), req.headers['user-agent']);
-    setSessionCookie(req, res, session.id);
+    res.cookie(SESSION_COOKIE_NAME, session.id, {
+      httpOnly: true,
+      secure: IS_PROD,
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
 
     const verifyToken = store.createVerificationToken(newUser.id);
 
@@ -169,7 +156,6 @@ app.post('/api/auth/register', (req, res) => {
 
     res.status(201).json({
       message: 'Account created successfully.',
-      sessionId: session.id,
       user: {
         id: newUser.id,
         email: newUser.email,
@@ -241,7 +227,13 @@ app.post('/api/auth/login', (req, res) => {
 
     // Create session
     const session = store.createSession(user.id, getClientIp(req), req.headers['user-agent']);
-    setSessionCookie(req, res, session.id);
+    res.cookie(SESSION_COOKIE_NAME, session.id, {
+      httpOnly: true,
+      secure: IS_PROD,
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
 
     store.updateUser(user.id, { lastLoginAt: new Date().toISOString() });
 
@@ -260,7 +252,6 @@ app.post('/api/auth/login', (req, res) => {
 
     res.json({
       message: 'Logged in successfully.',
-      sessionId: session.id,
       user: {
         id: user.id,
         email: user.email,
@@ -437,17 +428,6 @@ app.get('/api/content/item/:id', (req, res) => {
   res.json(item);
 });
 
-// Event / Content Interaction Tracking
-app.post('/api/analytics/track', (req: AuthenticatedRequest, res) => {
-  const { contentId, contentType, interactionType } = req.body;
-  if (!contentId || !contentType) {
-    return res.status(400).json({ error: 'Missing contentId or contentType.' });
-  }
-  const userId = req.user ? req.user.id : null;
-  const interaction = store.recordInteraction(userId, contentId, contentType, interactionType || 'view');
-  res.json({ success: true, id: interaction.id });
-});
-
 // --- User Goals & Progress ---
 
 app.get('/api/progress/goals', requireAuth, (req: AuthenticatedRequest, res) => {
@@ -477,13 +457,6 @@ app.post('/api/progress/complete/:activityId', requireAuth, (req: AuthenticatedR
 app.get('/api/admin/overview', requireAdmin, (req, res) => {
   const stats = store.getOverviewStats();
   res.json(stats);
-});
-
-// Admin Analytics
-app.get('/api/admin/analytics', requireAdmin, (req, res) => {
-  const range = (req.query.range as string) || '30d';
-  const analytics = store.getAnalyticsData(range);
-  res.json(analytics);
 });
 
 // Admin Users List
@@ -819,17 +792,16 @@ async function startServer() {
   if (!IS_PROD) {
     const isHmrDisabled = process.env.DISABLE_HMR !== 'false';
     const vite = await createViteServer({
-      root: __dirname,
       server: {
         middlewareMode: true,
-        hmr: { server: httpServer },
+        hmr: isHmrDisabled ? false : { server: httpServer },
         watch: isHmrDisabled ? null : {},
       },
       appType: 'spa',
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = path.resolve(__dirname, 'dist');
+    const distPath = path.resolve(process.cwd(), 'dist');
     app.use(express.static(distPath));
     app.get('*', (req, res) => {
       res.sendFile(path.resolve(distPath, 'index.html'));
@@ -837,8 +809,8 @@ async function startServer() {
   }
 
   httpServer.listen(PORT, '0.0.0.0', () => {
-    console.log(`✨ Eshal service active on http://0.0.0.0:${PORT}`);
-    console.log(`🔐 Admin credentials: admin@eshal.org / AdminPassword123!`);
+    console.log(`✨ Little Steps service active on http://0.0.0.0:${PORT}`);
+    console.log(`🔐 Admin credentials: admin@littlesteps.org / AdminPassword123!`);
   });
 }
 

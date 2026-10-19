@@ -161,7 +161,7 @@ export const LearnPage: React.FC<LearnPageProps> = ({ activities, onStartActivit
                   </div>
 
                   <p className="text-xs sm:text-sm text-[#728078] leading-relaxed mb-4 font-medium">
-                    Young autistic children thrive on predictable routines. Lessons in Eshal have no hidden surprises or timed penalties.
+                    Young autistic children thrive on predictable routines. Lessons in Little Steps have no hidden surprises or timed penalties.
                   </p>
 
                   <div className="space-y-2 text-xs text-[#263831]">

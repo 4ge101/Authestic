@@ -8,11 +8,9 @@ import {
   Folder, 
   Settings,
   MessageSquare,
-  BookText,
-  Shield
+  BookText
 } from 'lucide-react';
 import { SproutIcon } from './OrganicDecorative';
-import { useAuth } from '../context/AuthContext';
 
 interface SidebarProps {
   onCloseMobileDrawer?: () => void;
@@ -25,7 +23,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { isAdmin, isSupport } = useAuth();
 
   const navItems = [
     { path: '/', label: 'Home', icon: Home },
@@ -36,7 +33,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { path: '/progress', label: 'Progress', icon: BarChart2 },
     { path: '/resources', label: 'Resources', icon: Folder },
     { path: '/settings', label: 'Settings', icon: Settings },
-    { path: '/admin', label: 'Admin Panel', icon: Shield, isAdminSection: true },
   ];
 
   const handleNavClick = (path: string) => {
@@ -56,7 +52,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           className="flex items-center gap-2.5 mb-7 px-1 cursor-pointer group focus:outline-none focus:ring-2 focus:ring-[#568469] rounded-xl transition-transform active:scale-98"
           tabIndex={0}
           role="button"
-          aria-label="Eshal Home"
+          aria-label="Little Steps Home"
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
@@ -69,7 +65,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
           <div>
             <h1 className="font-extrabold text-base leading-tight tracking-tight text-[#263831] group-hover:text-[#568469] transition-colors">
-              Eshal
+              Little Steps
             </h1>
           </div>
         </div>
@@ -100,12 +96,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     isActive ? 'text-[#568469]' : 'text-[#6C7D73]'
                   }`} 
                 />
-                <span className="truncate flex-1">{item.label}</span>
-                {(item as any).isAdminSection && (
-                  <span className="text-[9px] font-black tracking-wider uppercase px-1.5 py-0.5 rounded-md bg-[#568469]/15 text-[#568469]">
-                    PANEL
-                  </span>
-                )}
+                <span className="truncate">{item.label}</span>
               </button>
             );
           })}

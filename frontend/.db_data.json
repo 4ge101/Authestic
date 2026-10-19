@@ -1,34 +1,115 @@
 {
   "users": [
     {
-      "id": "e9077721-3b76-4fe4-a4f3-42f882e8c3d7",
+      "id": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
       "email": "admin@eshal.org",
-      "passwordHash": "$2a$10$rpTeZ8DRYzz3fF62i1qH4OYDjX2gYpHXaoY7WaS40f5GqYH0L2CVm",
+      "passwordHash": "$2b$10$kh.3Cmk.xybLahEGWo/MbuEjRTfu7Frhikk3Qbnyu61yZ8zNNMULW",
       "name": "Eshal Admin",
       "role": "admin",
       "status": "active",
       "emailVerified": true,
       "avatar": "boy",
+      "lastLoginAt": "2026-10-16T17:58:34.212Z",
+      "createdAt": "2026-10-16T17:58:22.538Z",
+      "updatedAt": "2026-10-16T17:58:34.212Z"
+    },
+    {
+      "email": "testuser@example.com",
+      "passwordHash": "$2b$10$u32qMCaN4XmMHQ.jovuJou2afiSdk5Hsz15hwro8XVoS2aw7EJdV2",
+      "name": "Leo Learner",
+      "role": "user",
+      "status": "active",
+      "emailVerified": false,
+      "avatar": "boy",
       "lastLoginAt": null,
-      "createdAt": "2026-10-19T16:52:58.584Z",
-      "updatedAt": "2026-10-19T16:52:58.584Z"
+      "id": "c7099e92-cb46-4438-af4f-eef5c191ce55",
+      "createdAt": "2026-10-16T17:58:43.351Z",
+      "updatedAt": "2026-10-16T17:58:43.351Z"
     }
   ],
-  "sessions": [],
-  "verificationTokens": [],
+  "sessions": [
+    {
+      "id": "b27823519137fea651e7943724b872023fbbf0dc4484e38592adf7db819818ff",
+      "userId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "curl/7.88.1",
+      "expiresAt": "2026-10-23T17:58:34.211Z",
+      "createdAt": "2026-10-16T17:58:34.211Z"
+    },
+    {
+      "id": "9d8b506dd560c453f427f47266437e8d759ad4dc5771d55273c56ab1780b8005",
+      "userId": "c7099e92-cb46-4438-af4f-eef5c191ce55",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "curl/7.88.1",
+      "expiresAt": "2026-10-23T17:58:43.352Z",
+      "createdAt": "2026-10-16T17:58:43.352Z"
+    }
+  ],
+  "verificationTokens": [
+    {
+      "token": "e20edbc797fead174c90bbecdaf163ac27e49d76aeb8fd5a",
+      "userId": "c7099e92-cb46-4438-af4f-eef5c191ce55",
+      "expiresAt": "2026-10-17T17:58:43.353Z",
+      "usedAt": null,
+      "createdAt": "2026-10-16T17:58:43.353Z"
+    }
+  ],
   "resetTokens": [],
   "preferences": [
     {
-      "userId": "e9077721-3b76-4fe4-a4f3-42f882e8c3d7",
+      "userId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
       "soundEnabled": true,
       "reducedMotion": false,
       "highContrast": false,
       "theme": "sage",
       "dailyGoalMinutes": 30,
-      "updatedAt": "2026-10-19T16:52:58.584Z"
+      "updatedAt": "2026-10-16T17:58:22.538Z"
+    },
+    {
+      "userId": "c7099e92-cb46-4438-af4f-eef5c191ce55",
+      "soundEnabled": true,
+      "reducedMotion": false,
+      "highContrast": false,
+      "theme": "sage",
+      "dailyGoalMinutes": 20,
+      "updatedAt": "2026-10-16T17:58:43.351Z"
     }
   ],
-  "goals": [],
+  "goals": [
+    {
+      "id": "goal-1-c7099e92-cb46-4438-af4f-eef5c191ce55",
+      "userId": "c7099e92-cb46-4438-af4f-eef5c191ce55",
+      "title": "Morning Emotion Check-In",
+      "category": "communication",
+      "targetCount": 1,
+      "completedCount": 0,
+      "completed": false,
+      "date": "2026-10-16",
+      "createdAt": "2026-10-16T17:58:43.352Z"
+    },
+    {
+      "id": "goal-2-c7099e92-cb46-4438-af4f-eef5c191ce55",
+      "userId": "c7099e92-cb46-4438-af4f-eef5c191ce55",
+      "title": "Woodland Shape Puzzle",
+      "category": "focus",
+      "targetCount": 1,
+      "completedCount": 0,
+      "completed": false,
+      "date": "2026-10-16",
+      "createdAt": "2026-10-16T17:58:43.352Z"
+    },
+    {
+      "id": "goal-3-c7099e92-cb46-4438-af4f-eef5c191ce55",
+      "userId": "c7099e92-cb46-4438-af4f-eef5c191ce55",
+      "title": "Gentle Sensory Breathing",
+      "category": "sensory",
+      "targetCount": 1,
+      "completedCount": 0,
+      "completed": false,
+      "date": "2026-10-16",
+      "createdAt": "2026-10-16T17:58:43.352Z"
+    }
+  ],
   "progress": [],
   "content": [
     {
@@ -50,8 +131,8 @@
           "Audio Feedback"
         ]
       },
-      "createdAt": "2026-10-19T16:52:58.585Z",
-      "updatedAt": "2026-10-19T16:52:58.585Z"
+      "createdAt": "2026-10-16T17:58:22.539Z",
+      "updatedAt": "2026-10-16T17:58:22.539Z"
     },
     {
       "id": "act-breathing-bubble",
@@ -72,8 +153,8 @@
           "Visual Rhythm"
         ]
       },
-      "createdAt": "2026-10-19T16:52:58.585Z",
-      "updatedAt": "2026-10-19T16:52:58.585Z"
+      "createdAt": "2026-10-16T17:58:22.539Z",
+      "updatedAt": "2026-10-16T17:58:22.539Z"
     },
     {
       "id": "act-routine-morning",
@@ -94,8 +175,8 @@
           "Checklist"
         ]
       },
-      "createdAt": "2026-10-19T16:52:58.585Z",
-      "updatedAt": "2026-10-19T16:52:58.585Z"
+      "createdAt": "2026-10-16T17:58:22.539Z",
+      "updatedAt": "2026-10-16T17:58:22.539Z"
     },
     {
       "id": "act-forest-puzzles",
@@ -115,8 +196,8 @@
           "Nature Motifs"
         ]
       },
-      "createdAt": "2026-10-19T16:52:58.585Z",
-      "updatedAt": "2026-10-19T16:52:58.585Z"
+      "createdAt": "2026-10-16T17:58:22.539Z",
+      "updatedAt": "2026-10-16T17:58:22.539Z"
     },
     {
       "id": "act-visual-feelings",
@@ -137,8 +218,8 @@
           "Instant Audio"
         ]
       },
-      "createdAt": "2026-10-19T16:52:58.585Z",
-      "updatedAt": "2026-10-19T16:52:58.585Z"
+      "createdAt": "2026-10-16T17:58:22.539Z",
+      "updatedAt": "2026-10-16T17:58:22.539Z"
     },
     {
       "id": "story-gentle-forest",
@@ -156,8 +237,8 @@
         "pages": 6,
         "theme": "Quiet Spaces"
       },
-      "createdAt": "2026-10-19T16:52:58.585Z",
-      "updatedAt": "2026-10-19T16:52:58.585Z"
+      "createdAt": "2026-10-16T17:58:22.539Z",
+      "updatedAt": "2026-10-16T17:58:22.539Z"
     },
     {
       "id": "res-sensory-diet-guide",
@@ -172,31 +253,56 @@
       "status": "published",
       "orderIndex": 7,
       "details": {
-        "author": "Eshal Clinical OT Team",
+        "author": "Little Steps Clinical OT Team",
         "tags": [
           "Sensory Regulation",
           "Home Routines"
         ]
       },
-      "createdAt": "2026-10-19T16:52:58.585Z",
-      "updatedAt": "2026-10-19T16:52:58.585Z"
+      "createdAt": "2026-10-16T17:58:22.539Z",
+      "updatedAt": "2026-10-16T17:58:22.539Z"
     }
   ],
   "auditLogs": [
     {
-      "id": "de650fd3-918d-40be-ade5-19f886407979",
-      "actorId": "e9077721-3b76-4fe4-a4f3-42f882e8c3d7",
-      "actorEmail": "admin@eshal.org",
+      "id": "9c54e2eb-70e2-4be9-9f23-54536c378693",
+      "actorId": "c7099e92-cb46-4438-af4f-eef5c191ce55",
+      "actorEmail": "testuser@example.com",
+      "eventType": "register",
+      "targetType": "user",
+      "targetId": "c7099e92-cb46-4438-af4f-eef5c191ce55",
+      "details": {
+        "name": "Leo Learner"
+      },
+      "ipAddress": "127.0.0.1",
+      "userAgent": "curl/7.88.1",
+      "createdAt": "2026-10-16T17:58:43.353Z"
+    },
+    {
+      "id": "d32a04a9-5b10-42a9-8fb5-9c2c330675b0",
+      "actorId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "actorEmail": "admin@littlesteps.org",
+      "eventType": "login_success",
+      "targetType": "user",
+      "targetId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "details": {},
+      "ipAddress": "127.0.0.1",
+      "userAgent": "curl/7.88.1",
+      "createdAt": "2026-10-16T17:58:34.212Z"
+    },
+    {
+      "id": "a9db7a43-4a85-4cd1-8c31-6a77332dfc4e",
+      "actorId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "actorEmail": "admin@littlesteps.org",
       "eventType": "admin_bootstrap",
       "targetType": "user",
-      "targetId": "e9077721-3b76-4fe4-a4f3-42f882e8c3d7",
+      "targetId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
       "details": {
-        "message": "Initial Eshal Administrator account provisioned"
+        "message": "Initial Administrator account provisioned"
       },
-      "createdAt": "2026-10-19T16:52:58.585Z"
+      "createdAt": "2026-10-16T17:58:22.539Z"
     }
   ],
-  "interactions": [],
   "settings": {
     "appName": "Eshal",
     "brandTagline": "Autism Learning Platform",
@@ -205,6 +311,7 @@
     "sessionTimeoutHours": 168,
     "requireEmailVerification": false,
     "maxDailyGoalMinutes": 120,
-    "updatedAt": "2026-10-19T16:52:58.474Z"
-  }
+    "updatedAt": "2026-10-16T17:58:22.425Z"
+  },
+  "interactions": []
 }
