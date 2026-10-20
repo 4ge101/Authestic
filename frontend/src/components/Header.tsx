@@ -48,7 +48,7 @@ export const Header: React.FC<HeaderProps> = ({
         >
           {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
-        <span className="font-extrabold text-base text-[#263831] tracking-tight">Little Steps</span>
+        <span className="font-extrabold text-base text-[#263831] tracking-tight">Eshal</span>
       </div>
 
       <div className="hidden md:block flex-1" />

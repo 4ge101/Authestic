@@ -113,7 +113,7 @@ export const PlayPage: React.FC<PlayPageProps> = ({ activities, onStartActivity 
                   </h3>
 
                   <p className="text-xs text-[#728078] leading-relaxed font-medium mb-4">
-                    Traditional games often cause stress with ticking clocks and losing sounds. Little Steps games are open-ended and peaceful.
+                    Traditional games often cause stress with ticking clocks and losing sounds. Eshal games are open-ended and peaceful.
                   </p>
 
                   <div className="p-3.5 rounded-2xl bg-[#FFFDF8] border border-[#F4E3BF] space-y-2 text-xs text-[#263831]">

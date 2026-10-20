@@ -3,12 +3,33 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
 import { MobileNav } from './components/MobileNav';
 import { SearchResultsOverlay } from './components/SearchResultsOverlay';
+
+// Auth & Protection
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import { api } from './services/api';
+
+// Auth Pages
+import { LoginPage } from './pages/auth/LoginPage';
+import { RegisterPage } from './pages/auth/RegisterPage';
+import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage';
+import { ResetPasswordPage } from './pages/auth/ResetPasswordPage';
+import { VerifyEmailPage } from './pages/auth/VerifyEmailPage';
+
+// Admin Pages
+import { AdminLayout } from './pages/admin/AdminLayout';
+import { AdminOverviewPage } from './pages/admin/AdminOverviewPage';
+import { AdminAnalyticsPage } from './pages/admin/AdminAnalyticsPage';
+import { AdminUsersPage } from './pages/admin/AdminUsersPage';
+import { AdminContentPage } from './pages/admin/AdminContentPage';
+import { AdminAuditPage } from './pages/admin/AdminAuditPage';
+import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
 
 // Dedicated Pages
 import { HomePage } from './pages/HomePage';
@@ -45,6 +66,7 @@ import { playGentleChime, playSoftSuccess } from './utils/audio';
 
 function AppContent() {
   const navigate = useNavigate();
+  const { user: authUser, updatePreferences: savePreferences, updateName: saveName } = useAuth();
 
   // Application State
   const [user, setUser] = useState<UserProfile>(INITIAL_USER_PROFILE);
@@ -59,6 +81,74 @@ function AppContent() {
   const [isSensoryModalOpen, setIsSensoryModalOpen] = useState(false);
   const [isCaregiverModalOpen, setIsCaregiverModalOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Sync profile when authenticated
+  useEffect(() => {
+    if (authUser) {
+      setUser((prev) => ({
+        ...prev,
+        id: authUser.id,
+        name: authUser.name,
+        avatarUrl: authUser.avatar,
+        preferences: {
+          ...prev.preferences,
+          soundEnabled: authUser.preferences?.soundEnabled ?? prev.preferences.soundEnabled,
+          reducedMotion: authUser.preferences?.reducedMotion ?? prev.preferences.reducedMotion,
+          highContrast: authUser.preferences?.highContrast ?? prev.preferences.highContrast,
+        },
+      }));
+    }
+  }, [authUser]);
+
+  // Load activities and goals from backend API with fallback
+  useEffect(() => {
+    api.content
+      .getActivities()
+      .then((items) => {
+        if (items && items.length > 0) {
+          const remoteActs: Activity[] = items
+            .filter((i) => i.type === 'activity')
+            .map((i) => ({
+              id: i.id,
+              title: i.title,
+              category: (i.categoryName as any) || 'Play',
+              description: i.description,
+              durationMinutes: parseInt(i.duration, 10) || 5,
+              progressPercent: 0,
+              thumbnail: i.details?.thumbnail || '',
+              completed: false,
+              totalSteps: i.details?.totalSteps || 3,
+              completedSteps: 0,
+              tags: i.details?.tags || [],
+            }));
+          if (remoteActs.length > 0) {
+            setActivities(remoteActs);
+          }
+        }
+      })
+      .catch(() => {
+        // Fall back to offline catalog
+      });
+
+    api.progress
+      .getGoals()
+      .then((remoteGoals) => {
+        if (remoteGoals && remoteGoals.length > 0) {
+          setGoals(
+            remoteGoals.map((g) => ({
+              id: g.id,
+              title: g.title,
+              description: g.category,
+              completed: g.completed,
+              iconType: 'star',
+            }))
+          );
+        }
+      })
+      .catch(() => {
+        // Fall back to offline goals
+      });
+  }, []);
 
   // Derived Progress Calculation
   const progress: LearningProgress = useMemo(() => {
@@ -88,6 +178,7 @@ function AppContent() {
           } else {
             playGentleChime(user.preferences.soundEnabled, 350);
           }
+          api.progress.toggleGoal(goalId, nextState).catch(() => {});
           return { ...g, completed: nextState };
         }
         return g;
@@ -104,10 +195,12 @@ function AppContent() {
         ...updated,
       },
     }));
+    savePreferences(updated).catch(() => {});
   };
 
   const handleUpdateUserName = (name: string) => {
     setUser((prev) => ({ ...prev, name }));
+    saveName(name).catch(() => {});
   };
 
   const handleToggleSound = () => {
@@ -124,6 +217,7 @@ function AppContent() {
 
   // Activity start
   const handleStartActivity = (activity: Activity) => {
+    api.content.trackInteraction(activity.id, 'activity', 'session_start').catch(() => {});
     if (activity.id === 'act-breathing-bubble') {
       setIsSensoryModalOpen(true);
       return;
@@ -141,6 +235,8 @@ function AppContent() {
   };
 
   const handleCompleteActivity = (activityId: string) => {
+    api.progress.completeActivity(activityId).catch(() => {});
+    api.content.trackInteraction(activityId, 'activity', 'completed').catch(() => {});
     setActivities((prev) =>
       prev.map((act) => {
         if (act.id === activityId) {
@@ -157,9 +253,11 @@ function AppContent() {
   };
 
   return (
-    <div className={`min-h-screen bg-[#F8F6F0] text-[#263831] flex flex-col md:flex-row relative ${
-      user.preferences.highContrast ? 'contrast-105' : ''
-    }`}>
+    <div
+      className={`min-h-screen bg-[#F8F6F0] text-[#263831] flex flex-col md:flex-row relative ${
+        user.preferences.highContrast ? 'contrast-105' : ''
+      }`}
+    >
       {/* Desktop Fixed Left Sidebar */}
       <Sidebar
         onCloseMobileDrawer={() => setMobileMenuOpen(false)}
@@ -186,7 +284,7 @@ function AppContent() {
         </div>
       )}
 
-      {/* Main Content Area - with md:ml-[205px] so it scrolls smoothly alongside fixed sidebar */}
+      {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 pb-20 md:pb-0 relative md:ml-[205px]">
         {/* Floating Top Right Area with Search & Profile */}
         <div className="relative">
@@ -303,7 +401,7 @@ function AppContent() {
                 <button
                   type="button"
                   onClick={() => navigate('/')}
-                  className="px-6 py-2.5 rounded-full bg-[#568469] text-white font-bold text-xs"
+                  className="px-6 py-2.5 rounded-full bg-[#568469] text-white font-bold text-xs cursor-pointer"
                 >
                   Return to Home
                 </button>
@@ -312,7 +410,7 @@ function AppContent() {
           />
         </Routes>
 
-        {/* Redesigned Little Steps Organic Footer */}
+        {/* Eshal Organic Footer */}
         <Footer
           soundEnabled={user.preferences.soundEnabled}
           onToggleSound={handleToggleSound}
@@ -356,8 +454,44 @@ function AppContent() {
 export default function App() {
   return (
     <BrowserRouter>
-      <ScrollToTop />
-      <AppContent />
+      <AuthProvider>
+        <ScrollToTop />
+        <Routes>
+          {/* Public Authentication Pages */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
+          <Route path="/verify-email" element={<VerifyEmailPage />} />
+
+          {/* Protected Administrator Dashboard */}
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute requireAdmin>
+                <AdminLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<AdminOverviewPage />} />
+            <Route path="analytics" element={<AdminAnalyticsPage />} />
+            <Route path="users" element={<AdminUsersPage />} />
+            <Route path="content" element={<AdminContentPage />} />
+            <Route path="audit" element={<AdminAuditPage />} />
+            <Route path="settings" element={<AdminSettingsPage />} />
+          </Route>
+
+          {/* Protected Main Application */}
+          <Route
+            path="/*"
+            element={
+              <ProtectedRoute>
+                <AppContent />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

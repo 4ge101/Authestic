@@ -1,5 +1,5 @@
 /**
- * Production-ready persistent data store for Little Steps
+ * Production-ready persistent data store for Eshal
  * Implements full schema: users, sessions, verification tokens, reset tokens,
  * user preferences, daily goals, user progress, content items, audit logs, and settings.
  */
@@ -349,7 +349,7 @@ class Store {
           duration: '12 mins read',
           status: 'published',
           orderIndex: 7,
-          details: { author: 'Little Steps Clinical OT Team', tags: ['Sensory Regulation', 'Home Routines'] },
+          details: { author: 'Eshal Clinical OT Team', tags: ['Sensory Regulation', 'Home Routines'] },
           createdAt: now,
           updatedAt: now,
         },
@@ -690,6 +690,46 @@ class Store {
   // --- App Settings ---
   public getSettings(): AppSettingsRecord {
     return this.data.settings;
+  }
+
+  public updateSettings(updates: Partial<AppSettingsRecord>): AppSettingsRecord {
+    this.data.settings = {
+      ...this.data.settings,
+      ...updates,
+      updatedAt: new Date().toISOString(),
+    };
+    this.save();
+    return this.data.settings;
+  }
+
+  public getOverviewStats() {
+    const totalUsers = this.data.users.length;
+    const activeUsers = this.data.users.filter((u) => u.status === 'active').length;
+    const suspendedUsers = this.data.users.filter((u) => u.status === 'suspended').length;
+    const publishedContent = this.data.content.filter((c) => c.status === 'published').length;
+    const draftContent = this.data.content.filter((c) => c.status === 'draft').length;
+    const auditEventsCount = this.data.auditLogs.length;
+
+    const recentAuthEvents = this.data.auditLogs
+      .filter((a) => a.eventType.includes('login') || a.eventType.includes('register') || a.eventType.includes('reset'))
+      .slice(0, 10)
+      .map((a) => ({
+        email: a.actorEmail,
+        eventType: a.eventType,
+        timestamp: a.createdAt,
+        createdAt: a.createdAt,
+        ipAddress: a.ipAddress,
+      }));
+
+    return {
+      totalUsers,
+      activeUsers,
+      suspendedUsers,
+      publishedContent,
+      draftContent,
+      auditEventsCount,
+      recentAuthEvents,
+    };
   }
 
   // --- Interactions & Analytics Tracking ---

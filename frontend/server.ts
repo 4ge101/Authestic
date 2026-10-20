@@ -1,5 +1,5 @@
 /**
- * Little Steps Full-Stack Server
+ * Eshal Full-Stack Server
  * Integrates Express API + Vite middlewares with real authentication,
  * sessions, audit logging, RBAC, content management, and security controls.
  */
@@ -26,7 +26,7 @@ export interface AuthenticatedRequest extends Request {
 const app = express();
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 const IS_PROD = process.env.NODE_ENV === 'production';
-const SESSION_COOKIE_NAME = 'ls_session';
+const SESSION_COOKIE_NAME = 'eshal_session';
 
 // Security Headers
 app.use((req, res, next) => {
@@ -46,7 +46,12 @@ const getClientIp = (req: Request) => {
 
 // Session & User Context Middleware
 app.use((req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  const sessionId = req.cookies[SESSION_COOKIE_NAME];
+  const sessionId =
+    req.cookies[SESSION_COOKIE_NAME] ||
+    req.cookies['ls_session'] ||
+    (req.headers['authorization'] ? (req.headers['authorization'] as string).replace(/^Bearer\s+/i, '') : null) ||
+    (req.headers['x-session-id'] as string);
+
   if (sessionId) {
     const session = store.findSession(sessionId);
     if (session) {
@@ -90,7 +95,7 @@ app.get('/health', (req, res) => {
   res.json({
     status: 'healthy',
     timestamp: new Date().toISOString(),
-    service: 'Little Steps API',
+    service: 'Eshal API',
   });
 });
 
@@ -809,8 +814,8 @@ async function startServer() {
   }
 
   httpServer.listen(PORT, '0.0.0.0', () => {
-    console.log(`✨ Little Steps service active on http://0.0.0.0:${PORT}`);
-    console.log(`🔐 Admin credentials: admin@littlesteps.org / AdminPassword123!`);
+    console.log(`✨ Eshal service active on http://0.0.0.0:${PORT}`);
+    console.log(`🔐 Admin credentials: admin@eshal.org / AdminPassword123!`);
   });
 }
 
