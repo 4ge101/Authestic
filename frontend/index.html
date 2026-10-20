@@ -4,14 +4,52 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Eshal - Autism Learning Platform</title>
-    <meta name="description" content="Accessible, calm, and neurodiversity-affirming learning platform for young children and caregivers." />
+    <meta name="description" content="Eshal - Accessible, calm, and neurodiversity-affirming learning platform for young children and caregivers." />
     <meta property="og:title" content="Eshal - Autism Learning Platform" />
-    <meta property="og:description" content="Accessible, calm, and neurodiversity-affirming learning platform for young children and caregivers." />
+    <meta property="og:description" content="Eshal - Accessible, calm, and neurodiversity-affirming learning platform for young children and caregivers." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,300..800;1,6..12,300..800&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script>
+      // In AI Studio preview iframe, HMR is disabled. Intercept vite-hmr websockets to avoid transport errors.
+      if (typeof window !== 'undefined' && window.WebSocket) {
+        const NativeWebSocket = window.WebSocket;
+        window.WebSocket = function (url, protocols) {
+          if (protocols === 'vite-hmr' || (typeof url === 'string' && (url.includes('token=') || url.includes('/@vite/')))) {
+            const bus = new EventTarget();
+            return Object.assign(bus, {
+              readyState: 1,
+              OPEN: 1,
+              CONNECTING: 0,
+              CLOSING: 2,
+              CLOSED: 3,
+              send: function () {},
+              close: function () {},
+              addEventListener: bus.addEventListener.bind(bus),
+              removeEventListener: bus.removeEventListener.bind(bus),
+              dispatchEvent: bus.dispatchEvent.bind(bus),
+            });
+          }
+          return new NativeWebSocket(url, protocols);
+        };
+        Object.assign(window.WebSocket, NativeWebSocket);
+
+        window.addEventListener('unhandledrejection', function (e) {
+          if (e.reason && (e.reason.message?.includes('WebSocket') || e.reason.stack?.includes('@vite/client'))) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+          }
+        });
+        window.addEventListener('error', function (e) {
+          if (e.message?.includes('WebSocket') || e.filename?.includes('@vite/client')) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+          }
+        });
+      }
+    </script>
   </head>
   <body class="bg-[#F8F6F0] text-[#263831] antialiased selection:bg-[#E2EBD9] selection:text-[#263831]">
     <div id="root"></div>

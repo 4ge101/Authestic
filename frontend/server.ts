@@ -1,5 +1,5 @@
 /**
- * Eshal Full-Stack Server
+ * Little Steps Full-Stack Server
  * Integrates Express API + Vite middlewares with real authentication,
  * sessions, audit logging, RBAC, content management, and security controls.
  */
@@ -8,9 +8,14 @@ import express, { Request, Response, NextFunction } from 'express';
 import http from 'http';
 import cookieParser from 'cookie-parser';
 import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
 import bcrypt from 'bcryptjs';
 import { createServer as createViteServer } from 'vite';
-import { store, UserRecord } from './src/server/store.js';
+import { store, UserRecord } from './src/server/store';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // In AI Studio, ensure HMR is disabled to avoid websocket transport errors in iframe
 if (process.env.DISABLE_HMR === undefined) {
@@ -26,7 +31,7 @@ export interface AuthenticatedRequest extends Request {
 const app = express();
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 const IS_PROD = process.env.NODE_ENV === 'production';
-const SESSION_COOKIE_NAME = 'eshal_session';
+const SESSION_COOKIE_NAME = 'ls_session';
 
 // Security Headers
 app.use((req, res, next) => {
@@ -46,12 +51,7 @@ const getClientIp = (req: Request) => {
 
 // Session & User Context Middleware
 app.use((req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  const sessionId =
-    req.cookies[SESSION_COOKIE_NAME] ||
-    req.cookies['ls_session'] ||
-    (req.headers['authorization'] ? (req.headers['authorization'] as string).replace(/^Bearer\s+/i, '') : null) ||
-    (req.headers['x-session-id'] as string);
-
+  const sessionId = req.cookies[SESSION_COOKIE_NAME];
   if (sessionId) {
     const session = store.findSession(sessionId);
     if (session) {
@@ -95,7 +95,7 @@ app.get('/health', (req, res) => {
   res.json({
     status: 'healthy',
     timestamp: new Date().toISOString(),
-    service: 'Eshal API',
+    service: 'Little Steps API',
   });
 });
 
@@ -464,6 +464,13 @@ app.get('/api/admin/overview', requireAdmin, (req, res) => {
   res.json(stats);
 });
 
+// Admin Analytics
+app.get('/api/admin/analytics', requireAdmin, (req, res) => {
+  const range = (req.query.range as string) || '30d';
+  const data = store.getAnalyticsData(range);
+  res.json(data);
+});
+
 // Admin Users List
 app.get('/api/admin/users', requireAdmin, (req, res) => {
   const { search, role, status, page = '1', limit = '20' } = req.query;
@@ -797,6 +804,7 @@ async function startServer() {
   if (!IS_PROD) {
     const isHmrDisabled = process.env.DISABLE_HMR !== 'false';
     const vite = await createViteServer({
+      root: __dirname,
       server: {
         middlewareMode: true,
         hmr: isHmrDisabled ? false : { server: httpServer },
@@ -805,8 +813,24 @@ async function startServer() {
       appType: 'spa',
     });
     app.use(vite.middlewares);
+
+    // Development SPA fallback: serve transformed index.html for all non-API routes
+    app.use('*', async (req, res, next) => {
+      if (req.originalUrl.startsWith('/api') || req.originalUrl.startsWith('/health')) {
+        return next();
+      }
+      try {
+        const indexPath = path.resolve(__dirname, 'index.html');
+        let template = fs.readFileSync(indexPath, 'utf-8');
+        template = await vite.transformIndexHtml(req.originalUrl, template);
+        res.status(200).set({ 'Content-Type': 'text/html' }).end(template);
+      } catch (e: any) {
+        vite.ssrFixStacktrace(e);
+        next(e);
+      }
+    });
   } else {
-    const distPath = path.resolve(process.cwd(), 'dist');
+    const distPath = path.resolve(__dirname, 'dist');
     app.use(express.static(distPath));
     app.get('*', (req, res) => {
       res.sendFile(path.resolve(distPath, 'index.html'));

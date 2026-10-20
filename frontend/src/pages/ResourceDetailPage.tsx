@@ -96,7 +96,7 @@ export const ResourceDetailPage: React.FC = () => {
 
           <div className="pt-6 border-t border-[#EAE7DF]/70 flex items-center justify-between">
             <span className="text-xs text-[#728078] font-semibold">
-              Eshal Affirming Care Framework
+              Little Steps Affirming Care Framework
             </span>
             <button
               type="button"

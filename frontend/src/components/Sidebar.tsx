@@ -52,7 +52,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           className="flex items-center gap-2.5 mb-7 px-1 cursor-pointer group focus:outline-none focus:ring-2 focus:ring-[#568469] rounded-xl transition-transform active:scale-98"
           tabIndex={0}
           role="button"
-          aria-label="Eshal Home"
+          aria-label="Little Steps Home"
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
@@ -65,7 +65,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
           <div>
             <h1 className="font-extrabold text-base leading-tight tracking-tight text-[#263831] group-hover:text-[#568469] transition-colors">
-              Eshal
+              Little Steps
             </h1>
           </div>
         </div>

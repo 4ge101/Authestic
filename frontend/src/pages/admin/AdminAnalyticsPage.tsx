@@ -58,12 +58,12 @@ export const AdminAnalyticsPage: React.FC = () => {
   const growthChartCoords = useMemo(() => {
     if (!data || !data.userGrowth || data.userGrowth.length === 0) return null;
     const points = data.userGrowth;
-    const maxVal = Math.max(...points.map((p: any) => p.cumulativeUsers), 5);
+    const maxVal = Math.max(...points.map((p) => p.cumulativeUsers), 5);
     const width = 600;
     const height = 200;
     const padding = 25;
 
-    const coords = points.map((p: any, i: number) => {
+    const coords = points.map((p, i) => {
       const x = padding + (i / Math.max(1, points.length - 1)) * (width - padding * 2);
       const y = height - padding - (p.cumulativeUsers / maxVal) * (height - padding * 2);
       return { ...p, x, y };
@@ -87,9 +87,9 @@ export const AdminAnalyticsPage: React.FC = () => {
   const donutSlices = useMemo(() => {
     if (!data || !data.roleDistribution) return [];
     let cumulativeAngle = 0;
-    const total = data.roleDistribution.reduce((sum: number, r: any) => sum + r.count, 0) || 1;
+    const total = data.roleDistribution.reduce((sum, r) => sum + r.count, 0) || 1;
 
-    return data.roleDistribution.map((role: any) => {
+    return data.roleDistribution.map((role) => {
       const sliceAngle = (role.count / total) * 360;
       const startAngle = cumulativeAngle;
       const endAngle = cumulativeAngle + sliceAngle;
@@ -135,12 +135,12 @@ export const AdminAnalyticsPage: React.FC = () => {
   const activityChartCoords = useMemo(() => {
     if (!data || !data.platformActivity || data.platformActivity.length === 0) return null;
     const points = data.platformActivity;
-    const maxVal = Math.max(...points.map((p: any) => p.total), 8);
+    const maxVal = Math.max(...points.map((p) => p.total), 8);
     const width = 600;
     const height = 180;
     const padding = 25;
 
-    const coords = points.map((p: any, i: number) => {
+    const coords = points.map((p, i) => {
       const x = padding + (i / Math.max(1, points.length - 1)) * (width - padding * 2);
       const yTotal = height - padding - (p.total / maxVal) * (height - padding * 2);
       const yGames = height - padding - (p.gameSessions / maxVal) * (height - padding * 2);
@@ -335,15 +335,15 @@ export const AdminAnalyticsPage: React.FC = () => {
             </div>
           </div>
           <div className="min-w-0">
-            <p className="text-sm font-black text-[#263831] truncate" title={data?.summary.mostUsedContent.title}>
-              {data ? data.summary.mostUsedContent.title : '—'}
+            <p className="text-sm font-black text-[#263831] truncate" title={data?.summary.mostUsedContent?.title}>
+              {data?.summary.mostUsedContent?.title || '—'}
             </p>
             <div className="flex items-center gap-1.5 mt-1">
               <span className="text-[10px] font-bold text-[#568469] bg-[#E2EBD9] px-2 py-0.5 rounded-full truncate">
-                {data ? data.summary.mostUsedContent.categoryName : ''}
+                {data?.summary.mostUsedContent?.categoryName || ''}
               </span>
               <span className="text-[11px] font-semibold text-[#728078]">
-                {data ? `${data.summary.mostUsedContent.interactions} plays` : ''}
+                {data?.summary.mostUsedContent ? `${data.summary.mostUsedContent.interactions} plays` : ''}
               </span>
             </div>
           </div>
@@ -424,7 +424,7 @@ export const AdminAnalyticsPage: React.FC = () => {
                 />
 
                 {/* Data Points */}
-                {growthChartCoords.coords.map((pt: any, i: number) => (
+                {growthChartCoords.coords.map((pt, i) => (
                   <g
                     key={i}
                     className="cursor-pointer group"
@@ -506,7 +506,7 @@ export const AdminAnalyticsPage: React.FC = () => {
           {/* Donut SVG Canvas */}
           <div className="relative w-48 h-48 mx-auto my-2">
             <svg viewBox="0 0 200 200" className="w-full h-full">
-              {donutSlices.map((slice: any, i: number) => (
+              {donutSlices.map((slice, i) => (
                 <path
                   key={i}
                   d={slice.pathData}
@@ -530,7 +530,7 @@ export const AdminAnalyticsPage: React.FC = () => {
 
           {/* Donut Legend */}
           <div className="space-y-2 mt-4 pt-3 border-t border-[#EAE7DF]">
-            {data?.roleDistribution.map((r: any) => (
+            {data?.roleDistribution.map((r) => (
               <div
                 key={r.role}
                 onMouseEnter={() => setActiveDonutSegment(r.role)}
@@ -574,8 +574,8 @@ export const AdminAnalyticsPage: React.FC = () => {
 
           {/* Bar Chart Representation */}
           <div className="space-y-4">
-            {data?.contentPerformance.map((item: any) => {
-              const maxInteractions = Math.max(...data.contentPerformance.map((c: any) => c.count), 10);
+            {data?.contentPerformance.map((item) => {
+              const maxInteractions = Math.max(...data.contentPerformance.map((c) => c.count), 10);
               const widthPct = Math.round((item.count / maxInteractions) * 100);
 
               return (
@@ -690,7 +690,7 @@ export const AdminAnalyticsPage: React.FC = () => {
                 />
 
                 {/* Points */}
-                {activityChartCoords.coords.map((pt: any, i: number) => (
+                {activityChartCoords.coords.map((pt, i) => (
                   <g key={i} className="group">
                     <circle
                       cx={pt.x}

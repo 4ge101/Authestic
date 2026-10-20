@@ -1,7 +1,7 @@
 import React from 'react';
 
 /**
- * Organic Shape System for Eshal
+ * Organic Shape System for Little Steps
  * Genuine art-directed Bézier curves with natural asymmetrical contours,
  * shallow dips, offset crests, and rolling landscape waves.
  * NEVER simple ovals, stretched ellipses, or uniform border-radii.

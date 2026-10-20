@@ -78,7 +78,7 @@ export interface ApiAnalyticsData {
     newUsersThisMonth: number;
     totalStoriesAndGames: number;
     totalActivitySessions: number;
-    mostUsedContent: {
+    mostUsedContent?: {
       id: string;
       title: string;
       type: string;
@@ -117,42 +117,10 @@ export interface ApiAnalyticsData {
   }[];
 }
 
-const SESSION_STORAGE_KEY = 'eshal_session_token';
-
-export const setSessionToken = (token: string | null) => {
-  if (token) {
-    try {
-      localStorage.setItem(SESSION_STORAGE_KEY, token);
-    } catch {}
-  } else {
-    try {
-      localStorage.removeItem(SESSION_STORAGE_KEY);
-    } catch {}
-  }
-};
-
-export const getSessionToken = (): string | null => {
-  try {
-    return localStorage.getItem(SESSION_STORAGE_KEY);
-  } catch {
-    return null;
-  }
-};
-
 async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const headers = new Headers(options.headers || {});
   if (!headers.has('Content-Type') && options.body && typeof options.body === 'string') {
     headers.set('Content-Type', 'application/json');
-  }
-
-  const token = getSessionToken();
-  if (token) {
-    if (!headers.has('Authorization')) {
-      headers.set('Authorization', `Bearer ${token}`);
-    }
-    if (!headers.has('X-Session-Id')) {
-      headers.set('X-Session-Id', token);
-    }
   }
 
   const response = await fetch(endpoint, {
@@ -173,37 +141,22 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
 
 export const api = {
   auth: {
-    register: async (payload: { email: string; password: string; name: string; avatar?: string }) => {
-      const res = await request<{ message: string; user: ApiUser; devVerificationToken?: string; sessionId?: string }>('/api/auth/register', {
+    register: (payload: { email: string; password: string; name: string; avatar?: string }) =>
+      request<{ message: string; user: ApiUser; devVerificationToken?: string }>('/api/auth/register', {
         method: 'POST',
         body: JSON.stringify(payload),
-      });
-      if (res.sessionId) {
-        setSessionToken(res.sessionId);
-      }
-      return res;
-    },
+      }),
 
-    login: async (payload: { email: string; password: string }) => {
-      const res = await request<{ message: string; user: ApiUser; sessionId?: string }>('/api/auth/login', {
+    login: (payload: { email: string; password: string }) =>
+      request<{ message: string; user: ApiUser }>('/api/auth/login', {
         method: 'POST',
         body: JSON.stringify(payload),
-      });
-      if (res.sessionId) {
-        setSessionToken(res.sessionId);
-      }
-      return res;
-    },
+      }),
 
-    logout: async () => {
-      try {
-        await request<{ message: string }>('/api/auth/logout', {
-          method: 'POST',
-        });
-      } finally {
-        setSessionToken(null);
-      }
-    },
+    logout: () =>
+      request<{ message: string }>('/api/auth/logout', {
+        method: 'POST',
+      }),
 
     me: () =>
       request<{ user: ApiUser }>('/api/auth/me'),
@@ -254,12 +207,6 @@ export const api = {
 
     getItem: (id: string) =>
       request<ApiContentItem>(`/api/content/item/${id}`),
-
-    trackInteraction: (contentId: string, contentType: string, interactionType: 'view' | 'session_start' | 'completed' = 'view') =>
-      request<{ success: boolean }>('/api/content/track', {
-        method: 'POST',
-        body: JSON.stringify({ contentId, contentType, interactionType }),
-      }),
   },
 
   progress: {
@@ -346,6 +293,9 @@ export const api = {
         method: 'DELETE',
       }),
 
+    getAnalytics: (range: string = '30d') =>
+      request<ApiAnalyticsData>(`/api/admin/analytics?range=${range}`),
+
     getAuditLogs: () =>
       request<ApiAuditLog[]>('/api/admin/audit-logs'),
 
@@ -357,8 +307,5 @@ export const api = {
         method: 'PUT',
         body: JSON.stringify(updates),
       }),
-
-    getAnalytics: (range: string = '30d') =>
-      request<ApiAnalyticsData>(`/api/admin/analytics?range=${range}`),
   },
 };

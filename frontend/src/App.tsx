@@ -31,7 +31,7 @@ import { AdminContentPage } from './pages/admin/AdminContentPage';
 import { AdminAuditPage } from './pages/admin/AdminAuditPage';
 import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
 
-// Dedicated Pages
+// Dedicated User Pages
 import { HomePage } from './pages/HomePage';
 import { LearnPage } from './pages/LearnPage';
 import { PlayPage } from './pages/PlayPage';
@@ -64,7 +64,7 @@ import {
 import { Activity, DailyGoal, LearningProgress, ResourceItem, UserProfile } from './types';
 import { playGentleChime, playSoftSuccess } from './utils/audio';
 
-function AppContent() {
+function MainAppShell() {
   const navigate = useNavigate();
   const { user: authUser, updatePreferences: savePreferences, updateName: saveName } = useAuth();
 
@@ -82,73 +82,57 @@ function AppContent() {
   const [isCaregiverModalOpen, setIsCaregiverModalOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Sync profile when authenticated
+  // Sync state from Authenticated User
   useEffect(() => {
     if (authUser) {
-      setUser((prev) => ({
+      setUser((prev: UserProfile) => ({
         ...prev,
         id: authUser.id,
         name: authUser.name,
-        avatarUrl: authUser.avatar,
+        role: authUser.role,
         preferences: {
           ...prev.preferences,
-          soundEnabled: authUser.preferences?.soundEnabled ?? prev.preferences.soundEnabled,
-          reducedMotion: authUser.preferences?.reducedMotion ?? prev.preferences.reducedMotion,
-          highContrast: authUser.preferences?.highContrast ?? prev.preferences.highContrast,
+          soundEnabled: authUser.preferences.soundEnabled ?? true,
+          reducedMotion: authUser.preferences.reducedMotion ?? false,
+          highContrast: authUser.preferences.highContrast ?? false,
         },
       }));
     }
   }, [authUser]);
 
-  // Load activities and goals from backend API with fallback
+  // Load Database Goals and Activities
   useEffect(() => {
-    api.content
-      .getActivities()
-      .then((items) => {
-        if (items && items.length > 0) {
-          const remoteActs: Activity[] = items
-            .filter((i) => i.type === 'activity')
-            .map((i) => ({
-              id: i.id,
-              title: i.title,
-              category: (i.categoryName as any) || 'Play',
-              description: i.description,
-              durationMinutes: parseInt(i.duration, 10) || 5,
-              progressPercent: 0,
-              thumbnail: i.details?.thumbnail || '',
-              completed: false,
-              totalSteps: i.details?.totalSteps || 3,
-              completedSteps: 0,
-              tags: i.details?.tags || [],
-            }));
-          if (remoteActs.length > 0) {
-            setActivities(remoteActs);
+    if (authUser) {
+      api.progress.getGoals()
+        .then((dbGoals) => {
+          if (dbGoals && dbGoals.length > 0) {
+            setGoals(dbGoals as any);
           }
-        }
-      })
-      .catch(() => {
-        // Fall back to offline catalog
-      });
+        })
+        .catch(() => {});
 
-    api.progress
-      .getGoals()
-      .then((remoteGoals) => {
-        if (remoteGoals && remoteGoals.length > 0) {
-          setGoals(
-            remoteGoals.map((g) => ({
-              id: g.id,
-              title: g.title,
-              description: g.category,
-              completed: g.completed,
-              iconType: 'star',
-            }))
-          );
-        }
-      })
-      .catch(() => {
-        // Fall back to offline goals
-      });
-  }, []);
+      api.content.getActivities()
+        .then((dbActs) => {
+          if (dbActs && dbActs.length > 0) {
+            setActivities((prev: Activity[]) => {
+              const map = new Map(prev.map((a) => [a.id, a]));
+              for (const item of dbActs) {
+                if (map.has(item.id)) {
+                  const existing = map.get(item.id)!;
+                  map.set(item.id, {
+                    ...existing,
+                    title: item.title,
+                    description: item.description,
+                  });
+                }
+              }
+              return Array.from(map.values());
+            });
+          }
+        })
+        .catch(() => {});
+    }
+  }, [authUser]);
 
   // Derived Progress Calculation
   const progress: LearningProgress = useMemo(() => {
@@ -167,9 +151,9 @@ function AppContent() {
     };
   }, [goals, activities]);
 
-  // Goal Toggle
+  // Goal Toggle with real backend persistence
   const handleToggleGoal = (goalId: string) => {
-    setGoals((prev) =>
+    setGoals((prev: DailyGoal[]) =>
       prev.map((g) => {
         if (g.id === goalId) {
           const nextState = !g.completed;
@@ -178,6 +162,7 @@ function AppContent() {
           } else {
             playGentleChime(user.preferences.soundEnabled, 350);
           }
+          // Persist to backend database
           api.progress.toggleGoal(goalId, nextState).catch(() => {});
           return { ...g, completed: nextState };
         }
@@ -186,9 +171,9 @@ function AppContent() {
     );
   };
 
-  // Preference Updates
+  // Preference Updates with backend persistence
   const handleUpdatePreferences = (updated: Partial<UserProfile['preferences']>) => {
-    setUser((prev) => ({
+    setUser((prev: UserProfile) => ({
       ...prev,
       preferences: {
         ...prev.preferences,
@@ -199,7 +184,7 @@ function AppContent() {
   };
 
   const handleUpdateUserName = (name: string) => {
-    setUser((prev) => ({ ...prev, name }));
+    setUser((prev: UserProfile) => ({ ...prev, name }));
     saveName(name).catch(() => {});
   };
 
@@ -217,7 +202,6 @@ function AppContent() {
 
   // Activity start
   const handleStartActivity = (activity: Activity) => {
-    api.content.trackInteraction(activity.id, 'activity', 'session_start').catch(() => {});
     if (activity.id === 'act-breathing-bubble') {
       setIsSensoryModalOpen(true);
       return;
@@ -235,11 +219,11 @@ function AppContent() {
   };
 
   const handleCompleteActivity = (activityId: string) => {
-    api.progress.completeActivity(activityId).catch(() => {});
-    api.content.trackInteraction(activityId, 'activity', 'completed').catch(() => {});
-    setActivities((prev) =>
+    setActivities((prev: Activity[]) =>
       prev.map((act) => {
         if (act.id === activityId) {
+          // Persist completion to backend
+          api.progress.completeActivity(activityId, act.totalSteps, 100).catch(() => {});
           return {
             ...act,
             completed: true,
@@ -305,11 +289,11 @@ function AppContent() {
               query={searchQuery}
               activities={activities}
               resources={resources}
-              onSelectActivity={(act) => {
+              onSelectActivity={(act: Activity) => {
                 setSearchQuery('');
                 handleStartActivity(act);
               }}
-              onOpenResource={(res) => {
+              onOpenResource={(res: ResourceItem) => {
                 setSearchQuery('');
                 navigate(`/resources/${res.id}`);
               }}
@@ -318,7 +302,7 @@ function AppContent() {
           )}
         </div>
 
-        {/* Dynamic Route Pages */}
+        {/* Dynamic User Routes */}
         <Routes>
           <Route
             path="/"
@@ -410,7 +394,7 @@ function AppContent() {
           />
         </Routes>
 
-        {/* Eshal Organic Footer */}
+        {/* Footer */}
         <Footer
           soundEnabled={user.preferences.soundEnabled}
           onToggleSound={handleToggleSound}
@@ -486,7 +470,7 @@ export default function App() {
             path="/*"
             element={
               <ProtectedRoute>
-                <AppContent />
+                <MainAppShell />
               </ProtectedRoute>
             }
           />

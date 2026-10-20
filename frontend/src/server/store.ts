@@ -1,5 +1,5 @@
 /**
- * Production-ready persistent data store for Eshal
+ * Production-ready persistent data store for Little Steps
  * Implements full schema: users, sessions, verification tokens, reset tokens,
  * user preferences, daily goals, user progress, content items, audit logs, and settings.
  */
@@ -349,7 +349,7 @@ class Store {
           duration: '12 mins read',
           status: 'published',
           orderIndex: 7,
-          details: { author: 'Eshal Clinical OT Team', tags: ['Sensory Regulation', 'Home Routines'] },
+          details: { author: 'Little Steps Clinical OT Team', tags: ['Sensory Regulation', 'Home Routines'] },
           createdAt: now,
           updatedAt: now,
         },
@@ -702,6 +702,7 @@ class Store {
     return this.data.settings;
   }
 
+  // --- Admin Overview Stats ---
   public getOverviewStats() {
     const totalUsers = this.data.users.length;
     const activeUsers = this.data.users.filter((u) => u.status === 'active').length;
@@ -711,14 +712,14 @@ class Store {
     const auditEventsCount = this.data.auditLogs.length;
 
     const recentAuthEvents = this.data.auditLogs
-      .filter((a) => a.eventType.includes('login') || a.eventType.includes('register') || a.eventType.includes('reset'))
-      .slice(0, 10)
-      .map((a) => ({
-        email: a.actorEmail,
-        eventType: a.eventType,
-        timestamp: a.createdAt,
-        createdAt: a.createdAt,
-        ipAddress: a.ipAddress,
+      .filter((l) => l.eventType.startsWith('login') || l.eventType === 'register' || l.eventType === 'logout')
+      .slice(0, 5)
+      .map((l) => ({
+        email: l.actorEmail,
+        eventType: l.eventType,
+        createdAt: l.createdAt,
+        timestamp: l.createdAt,
+        ipAddress: l.ipAddress,
       }));
 
     return {

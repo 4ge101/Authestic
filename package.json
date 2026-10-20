@@ -8,6 +8,8 @@
   ],
   "scripts": {
     "dev": "npm --prefix frontend run dev",
+    "server": "npm --prefix frontend run server",
+    "client": "npm --prefix frontend run client",
     "build": "npm --prefix frontend run build",
     "start": "npm --prefix frontend run start",
     "preview": "npm --prefix frontend run preview",

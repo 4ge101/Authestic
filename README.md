@@ -2,37 +2,70 @@
 
 Eshal is an accessible, sensory-friendly autism-support and learning platform with a child-friendly interface, organic layouts, illustrated activities, social stories, games, AAC communication tools, life skills routines, sensory breaks, and dedicated caregiver tools.
 
-## System Architecture
+## Quick Start on Localhost
 
+The app uses an integrated full-stack architecture where **a single command boots both the Express backend API and the React/Vite frontend**:
+
+### 1. Install Dependencies
+```bash
+npm install
 ```
-/
-├── backend/                    # Production Rust Modular Monolith Backend
-│   ├── Cargo.toml              # Tokio, Axum, SQLx, Argon2, Serde
-│   ├── migrations/             # PostgreSQL schema migrations
-│   │   └── 0001_initial_schema.sql
-│   ├── src/
-│   │   ├── main.rs             # Axum entry point and route dispatch
-│   │   ├── config.rs           # Environment configuration
-│   │   ├── db.rs               # SQLx PostgreSQL pool & migrations
-│   │   ├── auth.rs             # Authentication & session verification
-│   │   ├── admin.rs            # Admin overview & data analytics
-│   │   ├── content.rs          # Activities, stories, interaction tracking
-│   │   └── progress.rs         # Daily goals and completion records
-│   └── README.md
-│
-├── frontend/                   # React + TypeScript Frontend Application
-│   ├── src/                    # Components, pages, context, and styles
-│   ├── package.json            # Vite, React, Tailwind CSS
-│   ├── index.html              # Eshal HTML entrypoint
-│   └── server.ts               # Full-stack API & Vite middleware runner
-│
-├── metadata.json
-└── README.md
+
+### 2. Run the Application
+```bash
+npm run dev
 ```
+
+Open your browser to:
+**[http://localhost:3000](http://localhost:3000)**
+
+Both the **Backend API** (authentication, sessions, content, admin APIs under `/api/*`) and the **React Frontend** run together on port `3000`.
+
+---
+
+## Why did you see a 502 Bad Gateway error on localhost?
+
+A **502 Bad Gateway** on the login page happens when:
+1. **The backend was not running**: If you previously ran only the frontend (`npx vite` on port 5173 or 3000) or had a local reverse proxy (such as Nginx or Docker) forwarding `/api` requests to a server port that was offline, the browser/proxy returned `502 Bad Gateway`.
+2. **Missing backend process**: In the original repo, the backend was written in Rust. In this Node.js setup, the backend has been migrated into `frontend/server.ts` (Express + persistent JSON data store).
+
+### How to resolve it:
+Always use:
+```bash
+npm run dev
+```
+This runs `frontend/server.ts`, which starts Express on port `3000`, initializes the database, mounts the `/api/*` endpoints, and mounts the Vite frontend into the same server.
+
+---
+
+## Running Backend and Frontend Separately (Optional)
+
+If you prefer to run the backend and frontend in separate terminals:
+
+### Terminal 1: Backend Server (Port 3000)
+```bash
+npm run server
+```
+This boots the Express backend API on `http://localhost:3000`.
+
+### Terminal 2: Frontend Client (Port 5173 with API Proxy)
+```bash
+npm run client
+```
+This runs Vite on `http://localhost:5173`, automatically proxying `/api` requests to `http://localhost:3000`.
+
+---
+
+## Default Administrative Credentials
+
+- **Admin Email**: `admin@eshal.org`
+- **Admin Password**: `AdminPassword123!`
+
+---
 
 ## Features
 
-- **Authentication & RBAC**: Real authentication with sessions, password hashing, password recovery, email verification, and role-based protection (`user`, `support`, `admin`).
+- **Authentication & RBAC**: Real authentication with sessions, password hashing (`bcryptjs`), password recovery, email verification, and role-based protection (`user`, `support`, `admin`).
 - **Admin Dashboard**:
   - **Overview**: Real-time stats, user accounts, and audit log.
   - **Data Analytics**:
@@ -47,8 +80,3 @@ Eshal is an accessible, sensory-friendly autism-support and learning platform wi
   - AAC visual communication board.
   - Visual daily routines and life skills checklist.
   - Breathing bubble sensory breaks.
-
-## Default Administrative Credentials
-
-- **Admin Email**: `admin@eshal.org`
-- **Admin Password**: `AdminPassword123!`

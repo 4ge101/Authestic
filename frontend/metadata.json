@@ -1,6 +1,6 @@
 {
   "name": "Eshal - Autism Learning Platform",
-  "description": "Accessible, calm, and neurodiversity-affirming learning platform for young children and caregivers.",
+  "description": "Eshal - Accessible, calm, and neurodiversity-affirming learning platform for young children and caregivers.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
