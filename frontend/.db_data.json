@@ -9,9 +9,9 @@
       "status": "active",
       "emailVerified": true,
       "avatar": "boy",
-      "lastLoginAt": "2026-10-20T08:02:34.468Z",
+      "lastLoginAt": "2026-10-20T09:36:22.545Z",
       "createdAt": "2026-10-16T17:58:22.538Z",
-      "updatedAt": "2026-10-20T08:02:34.468Z"
+      "updatedAt": "2026-10-20T09:36:22.545Z"
     },
     {
       "email": "testuser@example.com",
@@ -51,6 +51,14 @@
       "userAgent": "curl/7.88.1",
       "expiresAt": "2026-10-27T08:02:34.467Z",
       "createdAt": "2026-10-20T08:02:34.467Z"
+    },
+    {
+      "id": "d5b6178032d636b7a7815d10aa2290c245d0d22e415b28950d1605e86bc2225b",
+      "userId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:158.0) Gecko/20100101 Firefox/158.0",
+      "expiresAt": "2026-10-27T09:36:22.545Z",
+      "createdAt": "2026-10-20T09:36:22.545Z"
     }
   ],
   "verificationTokens": [
@@ -116,6 +124,39 @@
       "completed": false,
       "date": "2026-10-16",
       "createdAt": "2026-10-16T17:58:43.352Z"
+    },
+    {
+      "id": "goal-1-b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "userId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "title": "Morning Emotion Check-In",
+      "category": "communication",
+      "targetCount": 1,
+      "completedCount": 0,
+      "completed": false,
+      "date": "2026-10-20",
+      "createdAt": "2026-10-20T09:36:22.598Z"
+    },
+    {
+      "id": "goal-2-b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "userId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "title": "Woodland Shape Puzzle",
+      "category": "focus",
+      "targetCount": 1,
+      "completedCount": 0,
+      "completed": false,
+      "date": "2026-10-20",
+      "createdAt": "2026-10-20T09:36:22.598Z"
+    },
+    {
+      "id": "goal-3-b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "userId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "title": "Gentle Sensory Breathing",
+      "category": "sensory",
+      "targetCount": 1,
+      "completedCount": 0,
+      "completed": false,
+      "date": "2026-10-20",
+      "createdAt": "2026-10-20T09:36:22.598Z"
     }
   ],
   "progress": [],
@@ -272,6 +313,18 @@
     }
   ],
   "auditLogs": [
+    {
+      "id": "c95a588e-64df-4bcb-a2c8-dcbfaf064521",
+      "actorId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "actorEmail": "admin@eshal.org",
+      "eventType": "login_success",
+      "targetType": "user",
+      "targetId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "details": {},
+      "ipAddress": "127.0.0.1",
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:158.0) Gecko/20100101 Firefox/158.0",
+      "createdAt": "2026-10-20T09:36:22.545Z"
+    },
     {
       "id": "17daef0c-9864-4a37-8cae-e32a384515a4",
       "actorId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
