@@ -21,14 +21,6 @@ Open your browser to:
 
 Both the **Backend API** (authentication, sessions, content, admin APIs under `/api/*`) and the **React Frontend** run together on port `3000`.
 
----
-
-## Why did you see a 502 Bad Gateway error on localhost?
-
-A **502 Bad Gateway** on the login page happens when:
-1. **The backend was not running**: If you previously ran only the frontend (`npx vite` on port 5173 or 3000) or had a local reverse proxy (such as Nginx or Docker) forwarding `/api` requests to a server port that was offline, the browser/proxy returned `502 Bad Gateway`.
-2. **Missing backend process**: In the original repo, the backend was written in Rust. In this Node.js setup, the backend has been migrated into `frontend/server.ts` (Express + persistent JSON data store).
-
 ### How to resolve it:
 Always use:
 ```bash
