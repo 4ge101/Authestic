@@ -157,6 +157,39 @@
       "completed": false,
       "date": "2026-10-20",
       "createdAt": "2026-10-20T09:36:22.598Z"
+    },
+    {
+      "id": "goal-1-b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "userId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "title": "Morning Emotion Check-In",
+      "category": "communication",
+      "targetCount": 1,
+      "completedCount": 0,
+      "completed": false,
+      "date": "2026-10-26",
+      "createdAt": "2026-10-26T15:40:34.805Z"
+    },
+    {
+      "id": "goal-2-b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "userId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "title": "Woodland Shape Puzzle",
+      "category": "focus",
+      "targetCount": 1,
+      "completedCount": 0,
+      "completed": false,
+      "date": "2026-10-26",
+      "createdAt": "2026-10-26T15:40:34.805Z"
+    },
+    {
+      "id": "goal-3-b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "userId": "b81a65bc-ef53-4baa-9aba-63f82fd3b160",
+      "title": "Gentle Sensory Breathing",
+      "category": "sensory",
+      "targetCount": 1,
+      "completedCount": 0,
+      "completed": false,
+      "date": "2026-10-26",
+      "createdAt": "2026-10-26T15:40:34.805Z"
     }
   ],
   "progress": [],
